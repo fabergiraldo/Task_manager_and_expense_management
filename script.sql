@@ -53,3 +53,115 @@ CREATE TABLE tarjetas (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
+
+-- Tabla Gastos
+CREATE TABLE gastos (
+    id_gasto INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    fecha DATE,
+    monto DECIMAL(12,2),
+    descripcion VARCHAR(255),
+    id_categoria INT,
+    id_moneda INT,
+    id_cuenta INT,
+    id_tarjeta INT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
+    FOREIGN KEY (id_moneda) REFERENCES monedas(id_moneda),
+    FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta),
+    FOREIGN KEY (id_tarjeta) REFERENCES tarjetas(id_tarjeta)
+);
+
+-- Tabla Ingresos
+CREATE TABLE ingresos (
+    id_ingreso INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    fecha DATE,
+    monto DECIMAL(12,2),
+    descripcion VARCHAR(255),
+    id_moneda INT,
+    id_cuenta INT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_moneda) REFERENCES monedas(id_moneda),
+    FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta)
+);
+
+-- Tabla Presupuestos
+CREATE TABLE presupuestos (
+    id_presupuesto INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    id_categoria INT,
+    mes YEAR(4),
+    monto DECIMAL(12,2),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
+
+-- Tabla Facturas
+CREATE TABLE facturas (
+    id_factura INT AUTO_INCREMENT PRIMARY KEY,
+    id_gasto INT,
+    ruta_archivo VARCHAR(255),
+    FOREIGN KEY (id_gasto) REFERENCES gastos(id_gasto)
+);
+
+-- Tabla Notificaciones
+CREATE TABLE notificaciones (
+    id_notificacion INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
+    mensaje VARCHAR(255),
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    leido BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+-- Tabla Proveedores
+CREATE TABLE proveedores (
+    id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    contacto VARCHAR(100),
+    telefono VARCHAR(20),
+    correo VARCHAR(100)
+);
+
+-- Tabla Métodos de Pago
+CREATE TABLE metodos_pago (
+    id_metodo_pago INT AUTO_INCREMENT PRIMARY KEY,
+    metodo VARCHAR(50)
+);
+
+-- Tabla Transacciones
+CREATE TABLE transacciones (
+    id_transaccion INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('Ingreso','Gasto'),
+    id_gasto INT,
+    id_ingreso INT,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_gasto) REFERENCES gastos(id_gasto),
+    FOREIGN KEY (id_ingreso) REFERENCES ingresos(id_ingreso)
+);
+
+-- Tabla Etiquetas
+CREATE TABLE etiquetas (
+    id_etiqueta INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50)
+);
+
+-- Tabla Gastos_Etiquetas (relación muchos a muchos)
+CREATE TABLE gastos_etiquetas (
+    id_gasto INT,
+    id_etiqueta INT,
+    PRIMARY KEY (id_gasto, id_etiqueta),
+    FOREIGN KEY (id_gasto) REFERENCES gastos(id_gasto),
+    FOREIGN KEY (id_etiqueta) REFERENCES etiquetas(id_etiqueta)
+);
+
+-- Tabla Ingresos_Etiquetas (relación muchos a muchos)
+CREATE TABLE ingresos_etiquetas (
+    id_ingreso INT,
+    id_etiqueta INT,
+    PRIMARY KEY (id_ingreso, id_etiqueta),
+    FOREIGN KEY (id_ingreso) REFERENCES ingresos(id_ingreso),
+    FOREIGN KEY (id_etiqueta) REFERENCES etiquetas(id_etiqueta)
+);
+
