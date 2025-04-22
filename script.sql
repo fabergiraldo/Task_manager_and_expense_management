@@ -53,6 +53,20 @@ CREATE TABLE tarjetas (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
+-- Tabla Proveedores
+CREATE TABLE proveedores (
+    id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    contacto VARCHAR(100),
+    telefono VARCHAR(20),
+    correo VARCHAR(100)
+);
+
+-- Tabla Métodos de Pago
+CREATE TABLE metodos_pago (
+    id_metodo_pago INT AUTO_INCREMENT PRIMARY KEY,
+    metodo VARCHAR(50)
+);
 
 -- Tabla Gastos
 CREATE TABLE gastos (
@@ -65,11 +79,15 @@ CREATE TABLE gastos (
     id_moneda INT,
     id_cuenta INT,
     id_tarjeta INT,
+    id_proveedor INT,
+    id_metodo_pago INT,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
     FOREIGN KEY (id_moneda) REFERENCES monedas(id_moneda),
     FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta),
-    FOREIGN KEY (id_tarjeta) REFERENCES tarjetas(id_tarjeta)
+    FOREIGN KEY (id_tarjeta) REFERENCES tarjetas(id_tarjeta),
+    FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor),
+    FOREIGN KEY (id_metodo_pago) REFERENCES metodos_pago(id_metodo_pago)
 );
 
 -- Tabla Ingresos
@@ -81,9 +99,11 @@ CREATE TABLE ingresos (
     descripcion VARCHAR(255),
     id_moneda INT,
     id_cuenta INT,
+    id_metodo_pago INT,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_moneda) REFERENCES monedas(id_moneda),
-    FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta)
+    FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta),
+    FOREIGN KEY (id_metodo_pago) REFERENCES metodos_pago(id_metodo_pago)
 );
 
 -- Tabla Presupuestos
@@ -101,8 +121,10 @@ CREATE TABLE presupuestos (
 CREATE TABLE facturas (
     id_factura INT AUTO_INCREMENT PRIMARY KEY,
     id_gasto INT,
+    id_proveedor INT,
     ruta_archivo VARCHAR(255),
-    FOREIGN KEY (id_gasto) REFERENCES gastos(id_gasto)
+    FOREIGN KEY (id_gasto) REFERENCES gastos(id_gasto),
+    FOREIGN KEY (id_proveedor) REFERENCES proveedores(id_proveedor)
 );
 
 -- Tabla Notificaciones
@@ -115,30 +137,21 @@ CREATE TABLE notificaciones (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
--- Tabla Proveedores
-CREATE TABLE proveedores (
-    id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    contacto VARCHAR(100),
-    telefono VARCHAR(20),
-    correo VARCHAR(100)
-);
-
--- Tabla Métodos de Pago
-CREATE TABLE metodos_pago (
-    id_metodo_pago INT AUTO_INCREMENT PRIMARY KEY,
-    metodo VARCHAR(50)
-);
-
 -- Tabla Transacciones
 CREATE TABLE transacciones (
     id_transaccion INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT,
     tipo ENUM('Ingreso','Gasto'),
-    id_gasto INT,
-    id_ingreso INT,
+    id_categoria INT,
+    id_moneda INT,
+    id_cuenta INT,
+    id_metodo_pago INT,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_gasto) REFERENCES gastos(id_gasto),
-    FOREIGN KEY (id_ingreso) REFERENCES ingresos(id_ingreso)
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria),
+    FOREIGN KEY (id_moneda) REFERENCES monedas(id_moneda),
+    FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta),
+    FOREIGN KEY (id_metodo_pago) REFERENCES metodos_pago(id_metodo_pago)
 );
 
 -- Tabla Etiquetas
@@ -164,4 +177,3 @@ CREATE TABLE ingresos_etiquetas (
     FOREIGN KEY (id_ingreso) REFERENCES ingresos(id_ingreso),
     FOREIGN KEY (id_etiqueta) REFERENCES etiquetas(id_etiqueta)
 );
-
