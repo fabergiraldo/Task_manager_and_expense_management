@@ -1,6 +1,7 @@
 class Etiquetas:
-    id_etiqueta: int = 0
-    nombre: str = None
+    def __init__(self, id_etiqueta: int = 0, nombre: str = None):
+        self.id_etiqueta = id_etiqueta
+        self.nombre = nombre
 
     def GetId_etiqueta(self) -> int:
         return self.id_etiqueta
@@ -11,3 +12,6 @@ class Etiquetas:
         return self.nombre
     def SetNombre(self, value: str) -> None:
         self.nombre = value
+
+    def __str__(self):
+        return f"ID: {self.GetId_etiqueta()}, nombre: {self.GetNombre()}"

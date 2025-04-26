@@ -28,7 +28,7 @@ class UsuariosRepositorio:
 
         except Exception as ex:
             print("Error al listar usuarios:", str(ex))
-            return []  # Devuelve una lista vacía si ocurre un error
+            return [] 
 
 
     def guardar(self, nombre, correo, contrasena):
