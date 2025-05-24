@@ -38,5 +38,14 @@ class Usuarios:
 
     def __str__(self):
         return f"ID: {self.GetIdUsuario()}, Nombre: {self.GetNombre()}, Correo: {self.GetCorreo()}, Fecha Registro: {self.GetFechaRegistro()}"
+    
+    def serialize(self):
+        return {
+            "id_usuario": self.id_usuario,
+            "nombre": self.nombre,
+            "correo": self.correo,
+            # normalmente no expondrías la contraseña en un JSON…
+            "fecha_registro": self.fecha_registro.isoformat() if self.fecha_registro else None
+        }
 
 

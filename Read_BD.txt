@@ -1,63 +1,63 @@
-usuarios ✅
+usuarios ✅😎
 Almacena los datos de los usuarios del sistema, permitiendo autenticación, 
 registro y control de acceso.
 
-categorias ✅
+categorias ✅😎
 Permite clasificar los gastos e ingresos según diferentes tipos o conceptos,
  facilitando reportes y análisis financiero.
 
-monedas ✅
+monedas ✅😎
 Guarda información sobre las diferentes monedas utilizadas en las transacciones
 (peso, dólar, euro, etc.).
 
-cuentas_bancarias ✅
+cuentas_bancarias ✅😎
 Almacena información sobre las cuentas bancarias de los usuarios, incluyendo saldo
 y moneda asociada.
 
-tarjetas ✅
+tarjetas ✅😎
 Contiene los datos relacionados con tarjetas de crédito o débito de los usuarios para
 registrar transacciones.
 
-gastos ✅
+gastos ✅😎
 Registra las transacciones relacionadas con gastos realizados por los usuarios, vinculándolos
  con categorías, monedas, cuentas bancarias y tarjetas.
 
-ingresos ✅
+ingresos ✅😎
 Similar a gastos, pero registra todas las entradas o ingresos de dinero al sistema, asociadas
 con monedas y cuentas bancarias.
 
-presupuestos ✅
+presupuestos ✅😎
 Almacena presupuestos asignados por los usuarios para diferentes categorías en determinados
 períodos de tiempo.
 
-facturas ✅
+facturas ✅😎
 Guarda referencias a documentos o comprobantes digitales de los gastos realizados, como archivos
 adjuntos.
 
-notificaciones ✅
+notificaciones ✅😎
 Registra mensajes o alertas enviadas al usuario, como recordatorios de pago o alertas de presupuesto
 superado.
 
-proveedores ✅
+proveedores ✅😎
 Contiene la información sobre los proveedores o entidades externas involucradas en los gastos 
 (ej.: empresas, tiendas).
 
-metodos_pago ✅
+metodos_pago ✅😎
 Almacena diferentes métodos utilizados para efectuar pagos (efectivo, transferencia bancaria,
 cheque, etc.).
 
-transacciones ✅
+transacciones ✅😎
 Tabla que consolida movimientos financieros (gastos e ingresos) en un único registro, útil para
 generar estados de cuenta o historial financiero.
 
-etiquetas ✅
+etiquetas ✅😎
 Permite crear etiquetas personalizadas que pueden asociarse a gastos e ingresos para facilitar
 búsquedas y reportes.
 
-gastos_etiquetas ✅
+gastos_etiquetas ✅😎
 Tabla intermedia para asociar múltiples etiquetas a cada gasto, facilitando la organización
 y filtrado de registros.
 
-ingresos_etiquetas ✅
+ingresos_etiquetas ✅😎
 Similar a la anterior, permite asociar múltiples etiquetas a cada ingreso, mejorando la capacidad
 de análisis y organización de los ingresos.

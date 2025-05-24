@@ -29,3 +29,5 @@ class Presupuestos:
         return self.monto
     def SetMonto(self, value: float) -> None:
         self.monto = value
+
+    

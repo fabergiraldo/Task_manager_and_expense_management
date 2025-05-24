@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API Gestión de Gastos</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding: 2rem; background-color: #f8f9fa; }
+    .accordion-button:not(.collapsed) { background-color: #0d6efd; color: #fff; }
+    .endpoint-link { display: flex; align-items: center; margin-bottom: .5rem; }
+    .endpoint-method { font-weight: bold; margin-right: .5rem; }
+    .endpoint-method span { font-size: .85rem; }
+    .endpoint-url { font-family: monospace; background: #e9ecef; padding: .3rem .5rem; border-radius: .3rem; flex-grow: 1; }
+    .result-card { margin-top: 1rem; }
+    .result-card .card-header { background-color: #343a40; color: #fff; }
+    .result-box {
+      background-color: #212529;
+      color: #f8f9fa;
+      font-family: monospace;
+      height: 300px;
+      overflow: auto;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="mb-4 text-center">API Gestión de Gastos</h1>
+    <div class="accordion mb-4" id="apiAccordion">
+
+      <!-- Token -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingToken">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseToken" aria-expanded="true" aria-controls="collapseToken">
+            1. Obtener Token
+          </button>
+        </h2>
+        <div id="collapseToken" class="accordion-collapse collapse show" aria-labelledby="headingToken" data-bs-parent="#apiAccordion">
+          <div class="accordion-body">
+            <div class="endpoint-link">
+              <div class="endpoint-method"><span class="badge bg-info text-dark">GET</span></div>
+              <div class="endpoint-url">/usuarios/token?usuario=admin&amp;password=password123</div>
+            </div>
+            <button class="btn btn-primary" id="btn-token">Ejecutar</button>
+            <div class="mt-3">
+              <p>Token:</p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-secondary">TOKEN</span></div>
+                <div class="endpoint-url" id="token-display">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usuarios -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingUsuarios">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUsuarios" aria-expanded="false" aria-controls="collapseUsuarios">
+            2. Usuarios
+          </button>
+        </h2>
+        <div id="collapseUsuarios" class="accordion-collapse collapse" aria-labelledby="headingUsuarios" data-bs-parent="#apiAccordion">
+          <div class="accordion-body">
+            <!-- Listar Usuarios -->
+            <div class="mb-4">
+              <p><strong>Listar Usuarios</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+                <div class="endpoint-url">/usuarios/listar?token=&lt;TOKEN&gt;</div>
+              </div>
+              <button class="btn btn-outline-primary" id="btn-usuarios-listar">Ejecutar</button>
+            </div>
+            <!-- Crear Usuario -->
+            <div class="mb-4">
+              <p><strong>Crear Usuario</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+                <div class="endpoint-url">/usuarios/crear?token=&lt;TOKEN&gt;&nombre=&lt;nombre&gt;&correo=&lt;correo&gt;&contrasena=&lt;contrasena&gt;</div>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-4"><input type="text" id="usuarios-crear-nombre" class="form-control" placeholder="Nombre"></div>
+                <div class="col-md-4"><input type="email" id="usuarios-crear-correo" class="form-control" placeholder="Correo"></div>
+                <div class="col-md-4"><input type="password" id="usuarios-crear-contrasena" class="form-control" placeholder="Contraseña"></div>
+              </div>
+              <button class="btn btn-outline-success mt-2" id="btn-usuarios-crear">Ejecutar</button>
+            </div>
+            <!-- Actualizar Usuario -->
+            <div class="mb-4">
+              <p><strong>Actualizar Usuario</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+                <div class="endpoint-url">/usuarios/actualizar?token=&lt;TOKEN&gt;&id_usuario=&lt;id&gt;&nombre=&lt;nombre&gt;&correo=&lt;correo&gt;&contrasena=&lt;contrasena&gt;</div>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-2"><input type="number" id="usuarios-actualizar-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+                <div class="col-md-3"><input type="text" id="usuarios-actualizar-nombre" class="form-control" placeholder="Nombre"></div>
+                <div class="col-md-3"><input type="email" id="usuarios-actualizar-correo" class="form-control" placeholder="Correo"></div>
+                <div class="col-md-3"><input type="password" id="usuarios-actualizar-contrasena" class="form-control" placeholder="Contraseña"></div>
+              </div>
+              <button class="btn btn-outline-warning mt-2" id="btn-usuarios-actualizar">Ejecutar</button>
+            </div>
+            <!-- Eliminar Usuario -->
+            <div class="mb-4">
+              <p><strong>Eliminar Usuario</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+                <div class="endpoint-url">/usuarios/eliminar?token=&lt;TOKEN&gt;&id_usuario=&lt;id&gt;</div>
+              </div>
+              <div class="col-md-2"><input type="number" id="usuarios-eliminar-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+              <button class="btn btn-outline-danger mt-2" id="btn-usuarios-eliminar">Ejecutar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categorías -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingCategorias">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategorias" aria-expanded="false" aria-controls="collapseCategorias">
+            3. Categorías
+          </button>
+        </h2>
+        <div id="collapseCategorias" class="accordion-collapse collapse" aria-labelledby="headingCategorias" data-bs-parent="#apiAccordion">
+          <div class="accordion-body">
+            <!-- Listar Categorías -->
+            <div class="mb-4">
+              <p><strong>Listar Categorías</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+                <div class="endpoint-url">/categorias/listar?token=&lt;TOKEN&gt;</div>
+              </div>
+              <button class="btn btn-outline-primary" id="btn-categorias-listar">Ejecutar</button>
+            </div>
+            <!-- Crear Categoría -->
+            <div class="mb-4">
+              <p><strong>Crear Categoría</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+                <div class="endpoint-url">/categorias/crear?token=&lt;TOKEN&gt;&nombre=&lt;nombre&gt;&descripcion=&lt;descripcion&gt;</div>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-6"><input type="text" id="categorias-crear-nombre" class="form-control" placeholder="Nombre"></div>
+                <div class="col-md-6"><input type="text" id="categorias-crear-descripcion" class="form-control" placeholder="Descripción"></div>
+              </div>
+              <button class="btn btn-outline-success mt-2" id="btn-categorias-crear">Ejecutar</button>
+            </div>
+            <!-- Actualizar Categoría -->
+            <div class="mb-4">
+              <p><strong>Actualizar Categoría</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+                <div class="endpoint-url">/categorias/actualizar?token=&lt;TOKEN&gt;&id_categoria=&lt;id&gt;&nombre=&lt;nombre&gt;&descripcion=&lt;descripcion&gt;</div>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-2"><input type="number" id="categorias-actualizar-id_categoria" class="form-control" placeholder="ID"></div>
+                <div class="col-md-5"><input type="text" id="categorias-actualizar-nombre" class="form-control" placeholder="Nombre"></div>
+                <div class="col-md-5"><input type="text" id="categorias-actualizar-descripcion" class="form-control" placeholder="Descripción"></div>
+              </div>
+              <button class="btn btn-outline-warning mt-2" id="btn-categorias-actualizar">Ejecutar</button>
+            </div>
+            <!-- Eliminar Categoría -->
+            <div class="mb-4">
+              <p><strong>Eliminar Categoría</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+                <div class="endpoint-url">/categorias/eliminar?token=&lt;TOKEN&gt;&id_categoria=&lt;id&gt;</div>
+              </div>
+              <div class="col-md-2"><input type="number" id="categorias-eliminar-id_categoria" class="form-control" placeholder="ID"></div>
+              <button class="btn btn-outline-danger mt-2" id="btn-categorias-eliminar">Ejecutar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+ <!-- 4. Monedas -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingMonedas">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonedas" aria-expanded="false" aria-controls="collapseMonedas">
+            4. Monedas
+          </button>
+        </h2>
+        <div id="collapseMonedas" class="accordion-collapse collapse" aria-labelledby="headingMonedas" data-bs-parent="#apiAccordion">
+          <div class="accordion-body">
+            <!-- Listar Monedas -->
+            <div class="mb-4">
+              <p><strong>Listar Monedas</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+                <div class="endpoint-url">/monedas/listar?token=&lt;TOKEN&gt;</div>
+              </div>
+              <button class="btn btn-outline-primary" id="btn-monedas-listar">Ejecutar</button>
+            </div>
+            <!-- Crear Moneda -->
+            <div class="mb-4">
+              <p><strong>Crear Moneda</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+                <div class="endpoint-url">/monedas/crear?token=&lt;TOKEN&gt;&nombre=&lt;nombre&gt;&codigo=&lt;codigo&gt;&simbolo=&lt;simbolo&gt;</div>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-4"><input type="text" id="monedas-crear-nombre" class="form-control" placeholder="Nombre"></div>
+                <div class="col-md-4"><input type="text" id="monedas-crear-codigo" class="form-control" placeholder="Código"></div>
+                <div class="col-md-4"><input type="text" id="monedas-crear-simbolo" class="form-control" placeholder="Símbolo"></div>
+              </div>
+              <button class="btn btn-outline-success mt-2" id="btn-monedas-crear">Ejecutar</button>
+            </div>
+            <!-- Actualizar Moneda -->
+            <div class="mb-4">
+              <p><strong>Actualizar Moneda</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+                <div class="endpoint-url">/monedas/actualizar?token=&lt;TOKEN&gt;&id_moneda=&lt;id&gt;&nombre=&lt;nombre&gt;&codigo=&lt;codigo&gt;&simbolo=&lt;simbolo&gt;</div>
+              </div>
+              <div class="row g-2">
+                <div class="col-md-2"><input type="number" id="monedas-actualizar-id_moneda" class="form-control" placeholder="ID"></div>
+                <div class="col-md-3"><input type="text" id="monedas-actualizar-nombre" class="form-control" placeholder="Nombre"></div>
+                <div class="col-md-3"><input type="text" id="monedas-actualizar-codigo" class="form-control" placeholder="Código"></div>
+                <div class="col-md-3"><input type="text" id="monedas-actualizar-simbolo" class="form-control" placeholder="Símbolo"></div>
+              </div>
+              <button class="btn btn-outline-warning mt-2" id="btn-monedas-actualizar">Ejecutar</button>
+            </div>
+            <!-- Eliminar Moneda -->
+            <div class="mb-4">
+              <p><strong>Eliminar Moneda</strong></p>
+              <div class="endpoint-link">
+                <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+                <div class="endpoint-url">/monedas/eliminar?token=&lt;TOKEN&gt;&id_moneda=&lt;id&gt;</div>
+              </div>
+              <div class="col-md-2"><input type="number" id="monedas-eliminar-id_moneda" class="form-control" placeholder="ID"></div>
+              <button class="btn btn-outline-danger mt-2" id="btn-monedas-eliminar">Ejecutar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuentas Bancarias -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingCuentas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseCuentas"
+            aria-expanded="false" aria-controls="collapseCuentas">
+      5. Cuentas Bancarias
+    </button>
+  </h2>
+  <div id="collapseCuentas" class="accordion-collapse collapse"
+       aria-labelledby="headingCuentas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Cuentas -->
+      <div class="mb-4">
+        <p><strong>Listar Cuentas Bancarias</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/cuentas_bancarias/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-cuentas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Cuenta -->
+      <div class="mb-4">
+        <p><strong>Crear Cuenta Bancaria</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /cuentas_bancarias/crear?token=&lt;TOKEN&gt;&id_usuario=&lt;id&gt;
+            &nombre_banco=&lt;texto&gt;&numero_cuenta=&lt;texto&gt;&saldo=&lt;num&gt;&id_moneda=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="cuentas-crear-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-3"><input type="text" id="cuentas-crear-nombre_banco" class="form-control" placeholder="Banco"></div>
+          <div class="col-md-3"><input type="text" id="cuentas-crear-numero_cuenta" class="form-control" placeholder="Nº Cuenta"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="cuentas-crear-saldo" class="form-control" placeholder="Saldo"></div>
+          <div class="col-md-2"><input type="number" id="cuentas-crear-id_moneda" class="form-control" placeholder="ID Moneda"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-cuentas-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Cuenta -->
+      <div class="mb-4">
+        <p><strong>Actualizar Cuenta Bancaria</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /cuentas_bancarias/actualizar?token=&lt;TOKEN&gt;&id_cuenta=&lt;id&gt;
+            &id_usuario=&lt;id&gt;&nombre_banco=&lt;texto&gt;&numero_cuenta=&lt;texto&gt;
+            &saldo=&lt;num&gt;&id_moneda=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="cuentas-actualizar-id_cuenta" class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="cuentas-actualizar-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-3"><input type="text" id="cuentas-actualizar-nombre_banco" class="form-control" placeholder="Banco"></div>
+          <div class="col-md-3"><input type="text" id="cuentas-actualizar-numero_cuenta" class="form-control" placeholder="Nº Cuenta"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="cuentas-actualizar-saldo" class="form-control" placeholder="Saldo"></div>
+          <div class="col-md-2"><input type="number" id="cuentas-actualizar-id_moneda" class="form-control" placeholder="ID Moneda"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-cuentas-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Cuenta -->
+      <div class="mb-4">
+        <p><strong>Eliminar Cuenta Bancaria</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/cuentas_bancarias/eliminar?token=&lt;TOKEN&gt;&id_cuenta=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="cuentas-eliminar-id_cuenta" class="form-control" placeholder="ID Cuenta"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-cuentas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Tarjetas -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingTarjetas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseTarjetas"
+            aria-expanded="false" aria-controls="collapseTarjetas">
+      6. Tarjetas
+    </button>
+  </h2>
+  <div id="collapseTarjetas" class="accordion-collapse collapse"
+       aria-labelledby="headingTarjetas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Tarjetas -->
+      <div class="mb-4">
+        <p><strong>Listar Tarjetas</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/tarjetas/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-tarjetas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Tarjeta -->
+      <div class="mb-4">
+        <p><strong>Crear Tarjeta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /tarjetas/crear?token=&lt;TOKEN&gt;
+            &id_usuario=&lt;id&gt;
+            &nombre_tarjeta=&lt;texto&gt;
+            &tipo=&lt;Debito|Credito&gt;
+            &numero_tarjeta=&lt;texto&gt;
+            &vencimiento=&lt;YYYY-MM-DD&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number"   id="tarjetas-crear-id_usuario"    class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-3"><input type="text"     id="tarjetas-crear-nombre_tarjeta" class="form-control" placeholder="Nombre Tarjeta"></div>
+          <div class="col-md-2"><input type="text"     id="tarjetas-crear-tipo"           class="form-control" placeholder="Tipo"></div>
+          <div class="col-md-3"><input type="text"     id="tarjetas-crear-numero_tarjeta" class="form-control" placeholder="Nº Tarjeta"></div>
+          <div class="col-md-2"><input type="date"     id="tarjetas-crear-vencimiento"    class="form-control" placeholder="Vencimiento"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-tarjetas-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Tarjeta -->
+      <div class="mb-4">
+        <p><strong>Actualizar Tarjeta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /tarjetas/actualizar?token=&lt;TOKEN&gt;
+            &id_tarjeta=&lt;id&gt;
+            &id_usuario=&lt;id&gt;
+            &nombre_tarjeta=&lt;texto&gt;
+            &tipo=&lt;Debito|Credito&gt;
+            &numero_tarjeta=&lt;texto&gt;
+            &vencimiento=&lt;YYYY-MM-DD&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="tarjetas-actualizar-id_tarjeta"    class="form-control" placeholder="ID Tarjeta"></div>
+          <div class="col-md-2"><input type="number" id="tarjetas-actualizar-id_usuario"     class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-3"><input type="text"   id="tarjetas-actualizar-nombre_tarjeta"class="form-control" placeholder="Nombre Tarjeta"></div>
+          <div class="col-md-2"><input type="text"   id="tarjetas-actualizar-tipo"          class="form-control" placeholder="Tipo"></div>
+          <div class="col-md-3"><input type="text"   id="tarjetas-actualizar-numero_tarjeta"class="form-control" placeholder="Nº Tarjeta"></div>
+          <div class="col-md-2"><input type="date"   id="tarjetas-actualizar-vencimiento"   class="form-control" placeholder="Vencimiento"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-tarjetas-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Tarjeta -->
+      <div class="mb-4">
+        <p><strong>Eliminar Tarjeta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/tarjetas/eliminar?token=&lt;TOKEN&gt;&id_tarjeta=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="tarjetas-eliminar-id_tarjeta" class="form-control" placeholder="ID Tarjeta"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-tarjetas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Gastos -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingGastos">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseGastos"
+            aria-expanded="false" aria-controls="collapseGastos">
+      7. Gastos
+    </button>
+  </h2>
+  <div id="collapseGastos" class="accordion-collapse collapse"
+       aria-labelledby="headingGastos" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Gastos -->
+      <div class="mb-4">
+        <p><strong>Listar Gastos</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/gastos/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-gastos-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Gasto -->
+      <div class="mb-4">
+        <p><strong>Crear Gasto</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /gastos/crear?token=&lt;TOKEN&gt;
+            &id_usuario=&lt;id&gt;
+            &fecha=&lt;YYYY-MM-DD&gt;
+            &monto=&lt;num&gt;
+            &descripcion=&lt;texto&gt;
+            &id_categoria=&lt;id&gt;
+            &id_moneda=&lt;id&gt;
+            &id_cuenta=&lt;id&gt;
+            &id_tarjeta=&lt;id&gt;
+            &id_proveedor=&lt;id&gt;
+            &id_metodo_pago=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_usuario"    class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="date"   id="gastos-crear-fecha"         class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="gastos-crear-monto"      class="form-control" placeholder="Monto"></div>
+          <div class="col-md-4"><input type="text"   id="gastos-crear-descripcion"  class="form-control" placeholder="Descripción"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_categoria" class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_tarjeta"   class="form-control" placeholder="ID Tarjeta"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_proveedor" class="form-control" placeholder="ID Proveedor"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-gastos-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Gasto -->
+      <div class="mb-4">
+        <p><strong>Actualizar Gasto</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /gastos/actualizar?token=&lt;TOKEN&gt;
+            &id_gasto=&lt;id&gt;
+            &id_usuario=&lt;id&gt;
+            &fecha=&lt;YYYY-MM-DD&gt;
+            &monto=&lt;num&gt;
+            &descripcion=&lt;texto&gt;
+            &id_categoria=&lt;id&gt;
+            &id_moneda=&lt;id&gt;
+            &id_cuenta=&lt;id&gt;
+            &id_tarjeta=&lt;id&gt;
+            &id_proveedor=&lt;id&gt;
+            &id_metodo_pago=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_gasto"    class="form-control" placeholder="ID Gasto"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_usuario"  class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="date"   id="gastos-actualizar-fecha"       class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="gastos-actualizar-monto"    class="form-control" placeholder="Monto"></div>
+          <div class="col-md-4"><input type="text"   id="gastos-actualizar-descripcion"class="form-control" placeholder="Descripción"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_categoria"class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_moneda" class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_cuenta" class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_tarjeta"class="form-control" placeholder="ID Tarjeta"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_proveedor"class="form-control" placeholder="ID Proveedor"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-gastos-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Gasto -->
+      <div class="mb-4">
+        <p><strong>Eliminar Gasto</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/gastos/eliminar?token=&lt;TOKEN&gt;&id_gasto=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="gastos-eliminar-id_gasto" class="form-control" placeholder="ID Gasto"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-gastos-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Ingresos -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingIngresos">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseIngresos"
+            aria-expanded="false" aria-controls="collapseIngresos">
+      8. Ingresos
+    </button>
+  </h2>
+  <div id="collapseIngresos" class="accordion-collapse collapse"
+       aria-labelledby="headingIngresos" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Ingresos -->
+      <div class="mb-4">
+        <p><strong>Listar Ingresos</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/ingresos/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-ingresos-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Ingreso -->
+      <div class="mb-4">
+        <p><strong>Crear Ingreso</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /ingresos/crear?token=&lt;TOKEN&gt;
+            &id_usuario=&lt;id&gt;
+            &fecha=&lt;YYYY-MM-DD&gt;
+            &monto=&lt;num&gt;
+            &descripcion=&lt;texto&gt;
+            &id_moneda=&lt;id&gt;
+            &id_cuenta=&lt;id&gt;
+            &id_metodo_pago=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="ingresos-crear-id_usuario"    class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="date"   id="ingresos-crear-fecha"         class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="ingresos-crear-monto"      class="form-control" placeholder="Monto"></div>
+          <div class="col-md-4"><input type="text"   id="ingresos-crear-descripcion" class="form-control" placeholder="Descripción"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-crear-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-crear-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-crear-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-ingresos-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Ingreso -->
+      <div class="mb-4">
+        <p><strong>Actualizar Ingreso</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /ingresos/actualizar?token=&lt;TOKEN&gt;
+            &id_ingreso=&lt;id&gt;
+            &id_usuario=&lt;id&gt;
+            &fecha=&lt;YYYY-MM-DD&gt;
+            &monto=&lt;num&gt;
+            &descripcion=&lt;texto&gt;
+            &id_moneda=&lt;id&gt;
+            &id_cuenta=&lt;id&gt;
+            &id_metodo_pago=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="ingresos-actualizar-id_ingreso"    class="form-control" placeholder="ID Ingreso"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-actualizar-id_usuario"    class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="date"   id="ingresos-actualizar-fecha"         class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="ingresos-actualizar-monto" class="form-control" placeholder="Monto"></div>
+          <div class="col-md-4"><input type="text"   id="ingresos-actualizar-descripcion"class="form-control" placeholder="Descripción"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-actualizar-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-actualizar-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="ingresos-actualizar-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-ingresos-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Ingreso -->
+      <div class="mb-4">
+        <p><strong>Eliminar Ingreso</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/ingresos/eliminar?token=&lt;TOKEN&gt;&id_ingreso=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="ingresos-eliminar-id_ingreso" class="form-control" placeholder="ID Ingreso"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-ingresos-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Presupuestos -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingPresupuestos">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapsePresupuestos"
+            aria-expanded="false" aria-controls="collapsePresupuestos">
+      9. Presupuestos
+    </button>
+  </h2>
+  <div id="collapsePresupuestos" class="accordion-collapse collapse"
+       aria-labelledby="headingPresupuestos" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Presupuestos -->
+      <div class="mb-4">
+        <p><strong>Listar Presupuestos</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/presupuestos/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-presupuestos-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Presupuesto -->
+      <div class="mb-4">
+        <p><strong>Crear Presupuesto</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /presupuestos/crear?token=&lt;TOKEN&gt;
+            &id_usuario=&lt;id&gt;
+            &id_categoria=&lt;id&gt;
+            &mes=&lt;YYYY&gt;
+            &monto=&lt;num&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-3"><input type="number" id="presupuestos-crear-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-3"><input type="number" id="presupuestos-crear-id_categoria" class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-3"><input type="number" id="presupuestos-crear-mes" class="form-control" placeholder="Mes (YYYY)"></div>
+          <div class="col-md-3"><input type="number" step="0.01" id="presupuestos-crear-monto" class="form-control" placeholder="Monto"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-presupuestos-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Presupuesto -->
+      <div class="mb-4">
+        <p><strong>Actualizar Presupuesto</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /presupuestos/actualizar?token=&lt;TOKEN&gt;
+            &id_presupuesto=&lt;id&gt;
+            &id_usuario=&lt;id&gt;
+            &id_categoria=&lt;id&gt;
+            &mes=&lt;YYYY&gt;
+            &monto=&lt;num&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="presupuestos-actualizar-id_presupuesto" class="form-control" placeholder="ID Presupuesto"></div>
+          <div class="col-md-3"><input type="number" id="presupuestos-actualizar-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-3"><input type="number" id="presupuestos-actualizar-id_categoria" class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-2"><input type="number" id="presupuestos-actualizar-mes" class="form-control" placeholder="Mes (YYYY)"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="presupuestos-actualizar-monto" class="form-control" placeholder="Monto"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-presupuestos-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Presupuesto -->
+      <div class="mb-4">
+        <p><strong>Eliminar Presupuesto</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/presupuestos/eliminar?token=&lt;TOKEN&gt;&id_presupuesto=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="presupuestos-eliminar-id_presupuesto" class="form-control" placeholder="ID Presupuesto"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-presupuestos-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Facturas -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingFacturas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseFacturas"
+            aria-expanded="false" aria-controls="collapseFacturas">
+      10. Facturas
+    </button>
+  </h2>
+  <div id="collapseFacturas" class="accordion-collapse collapse"
+       aria-labelledby="headingFacturas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Facturas -->
+      <div class="mb-4">
+        <p><strong>Listar Facturas</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/facturas/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-facturas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Factura -->
+      <div class="mb-4">
+        <p><strong>Crear Factura</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /facturas/crear?token=&lt;TOKEN&gt;
+            &id_gasto=&lt;id&gt;
+            &id_proveedor=&lt;id&gt;
+            &ruta_archivo=&lt;texto&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-3"><input type="number" id="facturas-crear-id_gasto"      class="form-control" placeholder="ID Gasto"></div>
+          <div class="col-md-3"><input type="number" id="facturas-crear-id_proveedor" class="form-control" placeholder="ID Proveedor"></div>
+          <div class="col-md-6"><input type="text"   id="facturas-crear-ruta_archivo" class="form-control" placeholder="Ruta Archivo"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-facturas-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Factura -->
+      <div class="mb-4">
+        <p><strong>Actualizar Factura</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /facturas/actualizar?token=&lt;TOKEN&gt;
+            &id_factura=&lt;id&gt;
+            &id_gasto=&lt;id&gt;
+            &id_proveedor=&lt;id&gt;
+            &ruta_archivo=&lt;texto&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="facturas-actualizar-id_factura"  class="form-control" placeholder="ID Factura"></div>
+          <div class="col-md-2"><input type="number" id="facturas-actualizar-id_gasto"     class="form-control" placeholder="ID Gasto"></div>
+          <div class="col-md-2"><input type="number" id="facturas-actualizar-id_proveedor"class="form-control" placeholder="ID Proveedor"></div>
+          <div class="col-md-6"><input type="text"   id="facturas-actualizar-ruta_archivo"class="form-control" placeholder="Ruta Archivo"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-facturas-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Factura -->
+      <div class="mb-4">
+        <p><strong>Eliminar Factura</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/facturas/eliminar?token=&lt;TOKEN&gt;&id_factura=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="facturas-eliminar-id_factura" class="form-control" placeholder="ID Factura"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-facturas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Notificaciones -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingNotificaciones">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseNotificaciones"
+            aria-expanded="false" aria-controls="collapseNotificaciones">
+      11. Notificaciones
+    </button>
+  </h2>
+  <div id="collapseNotificaciones" class="accordion-collapse collapse"
+       aria-labelledby="headingNotificaciones" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Notificaciones -->
+      <div class="mb-4">
+        <p><strong>Listar Notificaciones</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/notificaciones/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-notificaciones-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Notificación -->
+      <div class="mb-4">
+        <p><strong>Crear Notificación</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /notificaciones/crear?token=&lt;TOKEN&gt;
+            &id_usuario=&lt;id&gt;
+            &mensaje=&lt;texto&gt;
+            &fecha=&lt;YYYY-MM-DDTHH:MM:SS&gt;
+            &leido=&lt;true|false&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="notificaciones-crear-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-4"><input type="text"   id="notificaciones-crear-mensaje"    class="form-control" placeholder="Mensaje"></div>
+          <div class="col-md-3"><input type="datetime-local" id="notificaciones-crear-fecha"       class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="text"   id="notificaciones-crear-leido"       class="form-control" placeholder="Leído (true/false)"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-notificaciones-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Notificación -->
+      <div class="mb-4">
+        <p><strong>Actualizar Notificación</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /notificaciones/actualizar?token=&lt;TOKEN&gt;
+            &id_notificacion=&lt;id&gt;
+            &id_usuario=&lt;id&gt;
+            &mensaje=&lt;texto&gt;
+            &fecha=&lt;YYYY-MM-DDTHH:MM:SS&gt;
+            &leido=&lt;true|false&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number"         id="notificaciones-actualizar-id_notificacion" class="form-control" placeholder="ID Notificación"></div>
+          <div class="col-md-2"><input type="number"         id="notificaciones-actualizar-id_usuario"       class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-4"><input type="text"           id="notificaciones-actualizar-mensaje"          class="form-control" placeholder="Mensaje"></div>
+          <div class="col-md-3"><input type="datetime-local" id="notificaciones-actualizar-fecha"            class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="text"           id="notificaciones-actualizar-leido"            class="form-control" placeholder="Leído (true/false)"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-notificaciones-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Notificación -->
+      <div class="mb-4">
+        <p><strong>Eliminar Notificación</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/notificaciones/eliminar?token=&lt;TOKEN&gt;&id_notificacion=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="notificaciones-eliminar-id_notificacion" class="form-control" placeholder="ID Notificación"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-notificaciones-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Métodos de Pago -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingMetodosPago">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseMetodosPago"
+            aria-expanded="false" aria-controls="collapseMetodosPago">
+      12. Métodos de Pago
+    </button>
+  </h2>
+  <div id="collapseMetodosPago" class="accordion-collapse collapse"
+       aria-labelledby="headingMetodosPago" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Métodos de Pago -->
+      <div class="mb-4">
+        <p><strong>Listar Métodos de Pago</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/metodos_pago/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-metodos_pago-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Método de Pago -->
+      <div class="mb-4">
+        <p><strong>Crear Método de Pago</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">/metodos_pago/crear?token=&lt;TOKEN&gt;&metodo=&lt;texto&gt;</div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-6"><input type="text" id="metodos_pago-crear-metodo" class="form-control" placeholder="Método"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-metodos_pago-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Método de Pago -->
+      <div class="mb-4">
+        <p><strong>Actualizar Método de Pago</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">/metodos_pago/actualizar?token=&lt;TOKEN&gt;&id_metodo_pago=&lt;id&gt;&metodo=&lt;texto&gt;</div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="metodos_pago-actualizar-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+          <div class="col-md-6"><input type="text" id="metodos_pago-actualizar-metodo" class="form-control" placeholder="Método"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-metodos_pago-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Método de Pago -->
+      <div class="mb-4">
+        <p><strong>Eliminar Método de Pago</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/metodos_pago/eliminar?token=&lt;TOKEN&gt;&id_metodo_pago=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="metodos_pago-eliminar-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-metodos_pago-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Transacciones -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingTransacciones">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseTransacciones"
+            aria-expanded="false" aria-controls="collapseTransacciones">
+      13. Transacciones
+    </button>
+  </h2>
+  <div id="collapseTransacciones" class="accordion-collapse collapse"
+       aria-labelledby="headingTransacciones" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Transacciones -->
+      <div class="mb-4">
+        <p><strong>Listar Transacciones</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/transacciones/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-transacciones-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Transacción -->
+      <div class="mb-4">
+        <p><strong>Crear Transacción</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /transacciones/crear?token=&lt;TOKEN&gt;
+            &id_usuario=&lt;id&gt;
+            &tipo=&lt;Ingreso|Gasto&gt;
+            &id_categoria=&lt;id&gt;
+            &id_moneda=&lt;id&gt;
+            &id_cuenta=&lt;id&gt;
+            &id_metodo_pago=&lt;id&gt;
+            &fecha=&lt;YYYY-MM-DDTHH:MM:SS&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="transacciones-crear-id_usuario"    class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="text"   id="transacciones-crear-tipo"          class="form-control" placeholder="Tipo"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-crear-id_categoria" class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-crear-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-crear-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-crear-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+          <div class="col-md-3"><input type="datetime-local" id="transacciones-crear-fecha" class="form-control" placeholder="Fecha"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-transacciones-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Transacción -->
+      <div class="mb-4">
+        <p><strong>Actualizar Transacción</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /transacciones/actualizar?token=&lt;TOKEN&gt;
+            &id_transaccion=&lt;id&gt;
+            &id_usuario=&lt;id&gt;
+            &tipo=&lt;Ingreso|Gasto&gt;
+            &id_categoria=&lt;id&gt;
+            &id_moneda=&lt;id&gt;
+            &id_cuenta=&lt;id&gt;
+            &id_metodo_pago=&lt;id&gt;
+            &fecha=&lt;YYYY-MM-DDTHH:MM:SS&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="transacciones-actualizar-id_transaccion" class="form-control" placeholder="ID Transacción"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-actualizar-id_usuario"     class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="text"   id="transacciones-actualizar-tipo"           class="form-control" placeholder="Tipo"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-actualizar-id_categoria" class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-actualizar-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-actualizar-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="transacciones-actualizar-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
+          <div class="col-md-3"><input type="datetime-local" id="transacciones-actualizar-fecha" class="form-control" placeholder="Fecha"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-transacciones-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Transacción -->
+      <div class="mb-4">
+        <p><strong>Eliminar Transacción</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/transacciones/eliminar?token=&lt;TOKEN&gt;&id_transaccion=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="transacciones-eliminar-id_transaccion" class="form-control" placeholder="ID Transacción"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-transacciones-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Etiquetas -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingEtiquetas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseEtiquetas"
+            aria-expanded="false" aria-controls="collapseEtiquetas">
+      14. Etiquetas
+    </button>
+  </h2>
+  <div id="collapseEtiquetas" class="accordion-collapse collapse"
+       aria-labelledby="headingEtiquetas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Etiquetas -->
+      <div class="mb-4">
+        <p><strong>Listar Etiquetas</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/etiquetas/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-etiquetas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Crear Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">/etiquetas/crear?token=&lt;TOKEN&gt;&nombre=&lt;texto&gt;</div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-6">
+            <input type="text" id="etiquetas-crear-nombre" class="form-control" placeholder="Nombre">
+          </div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-etiquetas-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Actualizar Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /etiquetas/actualizar?token=&lt;TOKEN&gt;
+            &id_etiqueta=&lt;id&gt;&nombre=&lt;texto&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2">
+            <input type="number" id="etiquetas-actualizar-id_etiqueta" class="form-control" placeholder="ID Etiqueta">
+          </div>
+          <div class="col-md-6">
+            <input type="text" id="etiquetas-actualizar-nombre" class="form-control" placeholder="Nombre">
+          </div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-etiquetas-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Eliminar Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/etiquetas/eliminar?token=&lt;TOKEN&gt;&id_etiqueta=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2">
+          <input type="number" id="etiquetas-eliminar-id_etiqueta" class="form-control" placeholder="ID Etiqueta">
+        </div>
+        <button class="btn btn-outline-danger mt-2" id="btn-etiquetas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Gastos_Etiquetas -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingGastosEtiquetas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseGastosEtiquetas"
+            aria-expanded="false" aria-controls="collapseGastosEtiquetas">
+      15. Gastos_Etiquetas
+    </button>
+  </h2>
+  <div id="collapseGastosEtiquetas" class="accordion-collapse collapse"
+       aria-labelledby="headingGastosEtiquetas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Gastos_Etiquetas -->
+      <div class="mb-4">
+        <p><strong>Listar Gastos_Etiquetas</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/gastos_etiquetas/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-gastos_etiquetas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Relación Gasto–Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Crear Relación Gasto–Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /gastos_etiquetas/crear?token=&lt;TOKEN&gt;
+            &id_gasto=&lt;id&gt;&id_etiqueta=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-4"><input type="number" id="gastos_etiquetas-crear-id_gasto" class="form-control" placeholder="ID Gasto"></div>
+          <div class="col-md-4"><input type="number" id="gastos_etiquetas-crear-id_etiqueta" class="form-control" placeholder="ID Etiqueta"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-gastos_etiquetas-crear">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Relación Gasto–Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Eliminar Relación Gasto–Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">
+            /gastos_etiquetas/eliminar?token=&lt;TOKEN&gt;
+            &id_gasto=&lt;id&gt;&id_etiqueta=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-4"><input type="number" id="gastos_etiquetas-eliminar-id_gasto" class="form-control" placeholder="ID Gasto"></div>
+          <div class="col-md-4"><input type="number" id="gastos_etiquetas-eliminar-id_etiqueta" class="form-control" placeholder="ID Etiqueta"></div>
+        </div>
+        <button class="btn btn-outline-danger mt-2" id="btn-gastos_etiquetas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Ingresos_Etiquetas -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingIngresosEtiquetas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseIngresosEtiquetas"
+            aria-expanded="false" aria-controls="collapseIngresosEtiquetas">
+      16. Ingresos_Etiquetas
+    </button>
+  </h2>
+  <div id="collapseIngresosEtiquetas" class="accordion-collapse collapse"
+       aria-labelledby="headingIngresosEtiquetas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Ingresos_Etiquetas -->
+      <div class="mb-4">
+        <p><strong>Listar Ingresos_Etiquetas</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/ingresos_etiquetas/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-ingresos_etiquetas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Relación Ingreso–Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Crear Relación Ingreso–Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /ingresos_etiquetas/crear?token=&lt;TOKEN&gt;
+            &id_ingreso=&lt;id&gt;&id_etiqueta=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-4"><input type="number" id="ingresos_etiquetas-crear-id_ingreso" class="form-control" placeholder="ID Ingreso"></div>
+          <div class="col-md-4"><input type="number" id="ingresos_etiquetas-crear-id_etiqueta" class="form-control" placeholder="ID Etiqueta"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-ingresos_etiquetas-crear">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Relación Ingreso–Etiqueta -->
+      <div class="mb-4">
+        <p><strong>Eliminar Relación Ingreso–Etiqueta</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">
+            /ingresos_etiquetas/eliminar?token=&lt;TOKEN&gt;
+            &id_ingreso=&lt;id&gt;&id_etiqueta=&lt;id&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-4"><input type="number" id="ingresos_etiquetas-eliminar-id_ingreso" class="form-control" placeholder="ID Ingreso"></div>
+          <div class="col-md-4"><input type="number" id="ingresos_etiquetas-eliminar-id_etiqueta" class="form-control" placeholder="ID Etiqueta"></div>
+        </div>
+        <button class="btn btn-outline-danger mt-2" id="btn-ingresos_etiquetas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <!-- Resultado estilizado -->
+    <div class="result-card">
+      <div class="card">
+        <div class="card-header">Respuesta</div>
+        <div class="card-body p-0">
+          <div id="resultado" class="result-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let TOKEN = null;
+
+    // Obtener Token
+    document.getElementById('btn-token').onclick = async () => {
+      const res = await fetch(`/usuarios/token?usuario=admin&password=password123`);
+      const data = await res.json();
+      if (data.token) {
+        TOKEN = data.token;
+        document.getElementById('token-display').textContent = TOKEN;
+      } else {
+        alert(data.error || 'Error al obtener token');
+      }
+    };
+
+    // Map de botones y acciones
+    const actions = {
+      'btn-usuarios-listar': ['usuarios', 'listar'],
+      'btn-usuarios-crear': ['usuarios', 'crear', ['usuarios-crear-nombre', 'usuarios-crear-correo', 'usuarios-crear-contrasena']],
+      'btn-usuarios-actualizar': ['usuarios', 'actualizar', ['usuarios-actualizar-id_usuario', 'usuarios-actualizar-nombre', 'usuarios-actualizar-correo', 'usuarios-actualizar-contrasena']],
+      'btn-usuarios-eliminar': ['usuarios', 'eliminar', ['usuarios-eliminar-id_usuario']],
+      'btn-categorias-listar': ['categorias', 'listar'],
+      'btn-categorias-crear': ['categorias', 'crear', ['categorias-crear-nombre', 'categorias-crear-descripcion']],
+      'btn-categorias-actualizar': ['categorias', 'actualizar', ['categorias-actualizar-id_categoria','categorias-actualizar-nombre','categorias-actualizar-descripcion']],
+      'btn-categorias-eliminar': ['categorias', 'eliminar', ['categorias-eliminar-id_categoria']],
+      'btn-monedas-listar': ['monedas','listar'],
+      'btn-monedas-crear': ['monedas','crear',['monedas-crear-nombre','monedas-crear-codigo','monedas-crear-simbolo']],
+      'btn-monedas-actualizar': ['monedas','actualizar',['monedas-actualizar-id_moneda','monedas-actualizar-nombre','monedas-actualizar-codigo','monedas-actualizar-simbolo']],
+      'btn-monedas-eliminar': ['monedas','eliminar',['monedas-eliminar-id_moneda']],
+      'btn-cuentas-listar':     ['cuentas_bancarias','listar'],
+      'btn-cuentas-crear':      ['cuentas_bancarias','crear',   ['cuentas-crear-id_usuario','cuentas-crear-nombre_banco','cuentas-crear-numero_cuenta','cuentas-crear-saldo','cuentas-crear-id_moneda']],
+      'btn-cuentas-actualizar': ['cuentas_bancarias','actualizar',['cuentas-actualizar-id_cuenta','cuentas-actualizar-id_usuario','cuentas-actualizar-nombre_banco','cuentas-actualizar-numero_cuenta','cuentas-actualizar-saldo','cuentas-actualizar-id_moneda']],
+      'btn-cuentas-eliminar':   ['cuentas_bancarias','eliminar', ['cuentas-eliminar-id_cuenta']],
+      'btn-tarjetas-listar':      ['tarjetas','listar'],
+      'btn-tarjetas-crear':       ['tarjetas','crear',    ['tarjetas-crear-id_usuario','tarjetas-crear-nombre_tarjeta','tarjetas-crear-tipo','tarjetas-crear-numero_tarjeta','tarjetas-crear-vencimiento']],
+      'btn-tarjetas-actualizar':  ['tarjetas','actualizar',['tarjetas-actualizar-id_tarjeta','tarjetas-actualizar-id_usuario','tarjetas-actualizar-nombre_tarjeta','tarjetas-actualizar-tipo','tarjetas-actualizar-numero_tarjeta','tarjetas-actualizar-vencimiento']],
+      'btn-tarjetas-eliminar':    ['tarjetas','eliminar', ['tarjetas-eliminar-id_tarjeta']],
+      'btn-gastos-listar':     ['gastos','listar'],
+      'btn-gastos-crear':      ['gastos','crear',    ['gastos-crear-id_usuario','gastos-crear-fecha','gastos-crear-monto','gastos-crear-descripcion','gastos-crear-id_categoria','gastos-crear-id_moneda','gastos-crear-id_cuenta','gastos-crear-id_tarjeta','gastos-crear-id_proveedor','gastos-crear-id_metodo_pago']],
+      'btn-gastos-actualizar': ['gastos','actualizar',['gastos-actualizar-id_gasto','gastos-actualizar-id_usuario','gastos-actualizar-fecha','gastos-actualizar-monto','gastos-actualizar-descripcion','gastos-actualizar-id_categoria','gastos-actualizar-id_moneda','gastos-actualizar-id_cuenta','gastos-actualizar-id_tarjeta','gastos-actualizar-id_proveedor','gastos-actualizar-id_metodo_pago']],
+      'btn-gastos-eliminar':   ['gastos','eliminar', ['gastos-eliminar-id_gasto']],
+      'btn-ingresos-listar':     ['ingresos','listar'],
+      'btn-ingresos-crear':      ['ingresos','crear',    ['ingresos-crear-id_usuario','ingresos-crear-fecha','ingresos-crear-monto','ingresos-crear-descripcion','ingresos-crear-id_moneda','ingresos-crear-id_cuenta','ingresos-crear-id_metodo_pago']],
+      'btn-ingresos-actualizar': ['ingresos','actualizar',['ingresos-actualizar-id_ingreso','ingresos-actualizar-id_usuario','ingresos-actualizar-fecha','ingresos-actualizar-monto','ingresos-actualizar-descripcion','ingresos-actualizar-id_moneda','ingresos-actualizar-id_cuenta','ingresos-actualizar-id_metodo_pago']],
+      'btn-ingresos-eliminar':   ['ingresos','eliminar', ['ingresos-eliminar-id_ingreso']],
+      'btn-presupuestos-listar':     ['presupuestos','listar'],
+      'btn-presupuestos-crear':      ['presupuestos','crear',    ['presupuestos-crear-id_usuario','presupuestos-crear-id_categoria','presupuestos-crear-mes','presupuestos-crear-monto']],
+      'btn-presupuestos-actualizar': ['presupuestos','actualizar',['presupuestos-actualizar-id_presupuesto','presupuestos-actualizar-id_usuario','presupuestos-actualizar-id_categoria','presupuestos-actualizar-mes','presupuestos-actualizar-monto']],
+      'btn-presupuestos-eliminar':   ['presupuestos','eliminar', ['presupuestos-eliminar-id_presupuesto']],
+      'btn-facturas-listar':     ['facturas','listar'],
+      'btn-facturas-crear':      ['facturas','crear',    ['facturas-crear-id_gasto','facturas-crear-id_proveedor','facturas-crear-ruta_archivo']],
+      'btn-facturas-actualizar': ['facturas','actualizar',['facturas-actualizar-id_factura','facturas-actualizar-id_gasto','facturas-actualizar-id_proveedor','facturas-actualizar-ruta_archivo']],
+      'btn-facturas-eliminar':   ['facturas','eliminar', ['facturas-eliminar-id_factura']],
+      'btn-notificaciones-listar':     ['notificaciones','listar'],
+      'btn-notificaciones-crear':      ['notificaciones','crear',    ['notificaciones-crear-id_usuario','notificaciones-crear-mensaje','notificaciones-crear-fecha','notificaciones-crear-leido']],
+      'btn-notificaciones-actualizar': ['notificaciones','actualizar',['notificaciones-actualizar-id_notificacion','notificaciones-actualizar-id_usuario','notificaciones-actualizar-mensaje','notificaciones-actualizar-fecha','notificaciones-actualizar-leido']],
+      'btn-notificaciones-eliminar':   ['notificaciones','eliminar', ['notificaciones-eliminar-id_notificacion']],
+      'btn-metodos_pago-listar':     ['metodos_pago','listar'],
+      'btn-metodos_pago-crear':      ['metodos_pago','crear',    ['metodos_pago-crear-metodo']],
+      'btn-metodos_pago-actualizar': ['metodos_pago','actualizar',['metodos_pago-actualizar-id_metodo_pago','metodos_pago-actualizar-metodo']],
+      'btn-metodos_pago-eliminar':   ['metodos_pago','eliminar', ['metodos_pago-eliminar-id_metodo_pago']],
+      'btn-transacciones-listar':     ['transacciones','listar'],
+      'btn-transacciones-crear':      ['transacciones','crear',    ['transacciones-crear-id_usuario','transacciones-crear-tipo','transacciones-crear-id_categoria','transacciones-crear-id_moneda','transacciones-crear-id_cuenta','transacciones-crear-id_metodo_pago','transacciones-crear-fecha']],
+      'btn-transacciones-actualizar': ['transacciones','actualizar',['transacciones-actualizar-id_transaccion','transacciones-actualizar-id_usuario','transacciones-actualizar-tipo','transacciones-actualizar-id_categoria','transacciones-actualizar-id_moneda','transacciones-actualizar-id_cuenta','transacciones-actualizar-id_metodo_pago','transacciones-actualizar-fecha']],
+      'btn-transacciones-eliminar':   ['transacciones','eliminar', ['transacciones-eliminar-id_transaccion']],
+      'btn-etiquetas-listar':     ['etiquetas','listar'],
+      'btn-etiquetas-crear':      ['etiquetas','crear',    ['etiquetas-crear-nombre']],
+      'btn-etiquetas-actualizar': ['etiquetas','actualizar',['etiquetas-actualizar-id_etiqueta','etiquetas-actualizar-nombre']],
+      'btn-etiquetas-eliminar':   ['etiquetas','eliminar', ['etiquetas-eliminar-id_etiqueta']],
+      'btn-gastos_etiquetas-listar':     ['gastos_etiquetas','listar'],
+      'btn-gastos_etiquetas-crear':      ['gastos_etiquetas','crear',    ['gastos_etiquetas-crear-id_gasto','gastos_etiquetas-crear-id_etiqueta']],
+      'btn-gastos_etiquetas-eliminar':   ['gastos_etiquetas','eliminar', ['gastos_etiquetas-eliminar-id_gasto','gastos_etiquetas-eliminar-id_etiqueta']],
+      'btn-ingresos_etiquetas-listar':   ['ingresos_etiquetas','listar'],
+      'btn-ingresos_etiquetas-crear':    ['ingresos_etiquetas','crear',    ['ingresos_etiquetas-crear-id_ingreso','ingresos_etiquetas-crear-id_etiqueta']],
+      'btn-ingresos_etiquetas-eliminar': ['ingresos_etiquetas','eliminar', ['ingresos_etiquetas-eliminar-id_ingreso','ingresos_etiquetas-eliminar-id_etiqueta']]
+};
+
+    Object.entries(actions).forEach(([btnId, [ent, act, params]]) => {
+      document.getElementById(btnId).onclick = () => {
+        let p = {};
+        if (params) params.forEach(id => {
+          // Extraer la clave real del parámetro: parte después de dos guiones
+          const parts = id.split('-');
+          const key = parts.slice(2).join('_');
+          p[key] = document.getElementById(id).value;
+        });
+        callAPI(ent, act, p);
+      };
+    });
+
+    async function callAPI(entity, action, params = {}) {
+      if (!TOKEN) return alert('Obtén primero el token');
+      let url = `/${entity}/${action}?token=${TOKEN}`;
+      for (const key in params) url += `&${key}=${encodeURIComponent(params[key])}`;
+      const res = await fetch(url);
+      const json = await res.json();
+      document.getElementById('resultado').textContent = JSON.stringify(json, null, 2);
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+

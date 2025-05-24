@@ -22,3 +22,11 @@ class Monedas:
 		return self.simbolo
 	def SetSimbolo(self, value: str) -> None:
 		self.simbolo = value
+
+	def serialize(self):
+		return {
+            "id_moneda": self.id_moneda,
+            "nombre": self.nombre,
+            "codigo": self.codigo,
+            "simbolo": self.simbolo
+        }

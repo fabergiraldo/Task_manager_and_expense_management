@@ -11,3 +11,9 @@ class MetodosPago:
         return self.metodo
     def SetMetodo(self, value: str) -> None:
         self.metodo = value
+
+    def serialize(self):
+        return {
+            "id_metodo_pago": self.id_metodo_pago,
+            "metodo": self.metodo
+        }

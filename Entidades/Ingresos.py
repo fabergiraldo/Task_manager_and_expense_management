@@ -1,5 +1,6 @@
 class Ingresos:
-    def __init__(self, id_ingreso: int = 0, id_usuario: int = 0, fecha: str = None, monto: float = 0.0, descripcion: str = None, id_moneda: int = 0, id_cuenta: int = 0):
+    def __init__(self, id_ingreso=None, id_usuario=None, fecha=None, monto=None, descripcion=None,
+                 id_moneda=None, id_cuenta=None, id_metodo_pago=None):
         self.id_ingreso = id_ingreso
         self.id_usuario = id_usuario
         self.fecha = fecha
@@ -7,6 +8,7 @@ class Ingresos:
         self.descripcion = descripcion
         self.id_moneda = id_moneda
         self.id_cuenta = id_cuenta
+        self.id_metodo_pago = id_metodo_pago
     
 
     def GetId_ingreso(self) -> int:
@@ -44,5 +46,17 @@ class Ingresos:
     def SetId_cuenta(self, value: int) -> None:
         self.id_cuenta = value
 
-	def __str__(self):
-		return f"id_ingreso: {self.GetId_ingreso()}, id_usuario: {self.GetId_usuario()}, fecha: {self.GetRuta_archivo()}, monto: {self.GetMonto()}, descripcion: {self.GetDescripcion()}, id_moneda: {self.GetId_moneda()}, id_cuenta:{self.GetId_cuenta()}"
+    def __str__(self):
+        return f"id_ingreso: {self.GetId_ingreso()}, id_usuario: {self.GetId_usuario()}, fecha: {self.GetRuta_archivo()}, monto: {self.GetMonto()}, descripcion: {self.GetDescripcion()}, id_moneda: {self.GetId_moneda()}, id_cuenta:{self.GetId_cuenta()}"
+    
+    def serialize(self):
+        return {
+            "id_ingreso": self.id_ingreso,
+            "id_usuario": self.id_usuario,
+            "fecha": self.fecha.isoformat() if isinstance(self.fecha, (date, datetime)) else str(self.fecha),
+            "monto": float(self.monto) if self.monto is not None else None,
+            "descripcion": self.descripcion,
+            "id_moneda": self.id_moneda,
+            "id_cuenta": self.id_cuenta,
+            "id_metodo_pago": self.id_metodo_pago
+        }

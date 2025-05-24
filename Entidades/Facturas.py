@@ -19,5 +19,13 @@ class Facturas:
     def SetRuta_archivo(self, value: str) -> None:
         self.ruta_archivo = value
 
-	def __str__(self):
-		return f"ID: {self.GetId_factura()}, nombre: {self.GetId_gasto()}, descripcion: {self.GetRuta_archivo()}"
+    def __str__(self):
+        return f"ID: {self.GetId_factura()}, nombre: {self.GetId_gasto()}, descripcion: {self.GetRuta_archivo()}"
+
+    def serialize(self):
+        return {
+            "id_factura": self.id_factura,
+            "id_gasto": self.id_gasto,
+            "id_proveedor": self.id_proveedor,
+            "ruta_archivo": self.ruta_archivo
+        }

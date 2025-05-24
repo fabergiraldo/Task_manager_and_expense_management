@@ -13,5 +13,11 @@ class IngresosEtiquetas:
     def SetId_etiqueta(self, value: int) -> None:
         self.id_etiqueta = value
 
-	def __str__(self):
-		return f"id_ingreso: {self.GetId_ingreso()}, id_etiqueta: {self.GetId_etiqueta()}"
+    def __str__(self):
+        return f"id_ingreso: {self.GetId_ingreso()}, id_etiqueta: {self.GetId_etiqueta()}"
+    
+    def serialize(self):
+        return {
+            "id_ingreso": self.id_ingreso,
+            "id_etiqueta": self.id_etiqueta
+        }

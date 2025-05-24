@@ -15,3 +15,9 @@ class Etiquetas:
 
     def __str__(self):
         return f"ID: {self.GetId_etiqueta()}, nombre: {self.GetNombre()}"
+    
+    def serialize(self):
+        return {
+            "id_etiqueta": self.id_etiqueta,
+            "nombre": self.nombre
+        }

@@ -1,69 +1,45 @@
 import pyodbc
+from Utilidades.Configuracion import strConnection
 from Entidades.Transacciones import Transacciones
-from Utilidades.Configuracion import Configuracion
 
 class TransaccionesRepositorio:
-    def listar(self):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+
+    @staticmethod
+    def listar():
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
             cursor.execute(
-                "SELECT id_transaccion, tipo, id_gasto, id_ingreso, fecha FROM transacciones"
+                "SELECT id_transaccion, id_usuario, tipo, id_categoria, id_moneda, id_cuenta, id_metodo_pago, fecha FROM transacciones"
             )
-            lista = [
-                Transacciones(
-                    id_transaccion=row[0],
-                    tipo=row[1],
-                    id_gasto=row[2],
-                    id_ingreso=row[3],
-                    fecha=row[4]
-                ) for row in cursor
-            ]
-            cursor.close()
-            conexion.close()
-            return lista
-        except Exception as ex:
-            print("Error al listar transacciones:", ex)
-            return []
+            return [Transacciones(*fila) for fila in cursor.fetchall()]
 
-    def guardar(self, tipo, id_gasto=None, id_ingreso=None):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def crear(transaccion: Transacciones):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
             cursor.execute(
-                "INSERT INTO transacciones (tipo, id_gasto, id_ingreso) VALUES (?, ?, ?)",
-                (tipo, id_gasto, id_ingreso)
+                "INSERT INTO transacciones (id_usuario, tipo, id_categoria, id_moneda, id_cuenta, id_metodo_pago, fecha) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (transaccion.id_usuario, transaccion.tipo, transaccion.id_categoria,
+                 transaccion.id_moneda, transaccion.id_cuenta, transaccion.id_metodo_pago,
+                 transaccion.fecha)
             )
             conexion.commit()
-            cursor.close()
-            conexion.close()
-            print("Transacción guardada correctamente")
-        except Exception as ex:
-            print("Error al guardar transacción:", ex)
 
-    def actualizar(self, id_transaccion, tipo, id_gasto=None, id_ingreso=None):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def actualizar(transaccion: Transacciones):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
             cursor.execute(
-                "UPDATE transacciones SET tipo = ?, id_gasto = ?, id_ingreso = ? WHERE id_transaccion = ?",
-                (tipo, id_gasto, id_ingreso, id_transaccion)
+                "UPDATE transacciones SET id_usuario=?, tipo=?, id_categoria=?, id_moneda=?, id_cuenta=?, id_metodo_pago=?, fecha=? WHERE id_transaccion=?",
+                (transaccion.id_usuario, transaccion.tipo, transaccion.id_categoria,
+                 transaccion.id_moneda, transaccion.id_cuenta, transaccion.id_metodo_pago,
+                 transaccion.fecha, transaccion.id_transaccion)
             )
             conexion.commit()
-            cursor.close()
-            conexion.close()
-            print("Transacción actualizada correctamente")
-        except Exception as ex:
-            print("Error al actualizar transacción:", ex)
 
-    def eliminar(self, id_transaccion):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def eliminar(id_transaccion):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-            cursor.execute("DELETE FROM transacciones WHERE id_transaccion = ?", (id_transaccion,))
+            cursor.execute("DELETE FROM transacciones WHERE id_transaccion=?", (id_transaccion,))
             conexion.commit()
-            cursor.close()
-            conexion.close()
-            print("Transacción eliminada correctamente")
-        except Exception as ex:
-            print("Error al eliminar transacción:", ex)

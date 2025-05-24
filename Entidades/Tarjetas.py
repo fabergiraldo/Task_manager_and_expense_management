@@ -35,3 +35,13 @@ class Tarjetas:
         return self.vencimiento
     def SetVencimiento(self, value: str) -> None:
         self.vencimiento = value
+
+    def serialize(self):
+        return {
+            "id_tarjeta": self.id_tarjeta,
+            "id_usuario": self.id_usuario,
+            "nombre_tarjeta": self.nombre_tarjeta,
+            "tipo": self.tipo,
+            "numero_tarjeta": self.numero_tarjeta,
+            "vencimiento": self.vencimiento.isoformat() if self.vencimiento else None
+        }

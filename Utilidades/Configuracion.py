@@ -1,5 +1,4 @@
-class Configuracion:
-	strConnection: str = """
+strConnection: str = """
 		Driver={MySQL ODBC 9.2 Unicode Driver};
 		Server=localhost;
 		Database=gestion_gastos;

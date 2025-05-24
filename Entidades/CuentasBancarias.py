@@ -44,3 +44,13 @@ class CuentasBancarias:
 
 	def __str__(self):
 		return f"id_cuenta: {self.GetIdCuenta()}, id_usuario: {self.GetIdUsuario()}, nombre_banco: {self.GetNombreBanco()}, numero_cuenta: {self.GetNumeroCuenta()}, saldo: {self.GetSaldo()}, id_moneda: {self.GetIdMoneda()}"
+	
+	def serialize(self):
+		return {
+            "id_cuenta": self.id_cuenta,
+            "id_usuario": self.id_usuario,
+            "nombre_banco": self.nombre_banco,
+            "numero_cuenta": self.numero_cuenta,
+            "saldo": float(self.saldo) if self.saldo is not None else None,
+            "id_moneda": self.id_moneda
+        }

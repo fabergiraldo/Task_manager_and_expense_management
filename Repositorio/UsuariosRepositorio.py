@@ -1,80 +1,37 @@
 import pyodbc
+from Utilidades.Configuracion import strConnection
 from Entidades.Usuarios import Usuarios
-from Utilidades.Configuracion import Configuracion
 
 class UsuariosRepositorio:
 
-    def listar(self):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = "SELECT id_usuario, nombre, correo, fecha_registro FROM usuarios"
+    @staticmethod
+    def listar():
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-            cursor.execute(consulta)
+            cursor.execute("SELECT * FROM usuarios")
+            return [Usuarios(*fila) for fila in cursor.fetchall()]
 
-            lista = []
-            for elemento in cursor:
-                usuario = Usuarios(
-                    id_usuario=elemento[0],
-                    nombre=elemento[1],
-                    correo=elemento[2],
-                    fecha_registro=elemento[3]
-                )
-                lista.append(usuario)
-
-            cursor.close()
-            conexion.close()
-
-            return lista
-
-        except Exception as ex:
-            print("Error al listar usuarios:", str(ex))
-            return [] 
-
-
-    def guardar(self, nombre, correo, contrasena):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def crear(usuario: Usuarios):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = "INSERT INTO usuarios (nombre, correo, contrasena) VALUES (?, ?, ?)"
-            cursor.execute(consulta, (nombre, correo, contrasena))
+            cursor.execute("""
+                INSERT INTO usuarios (nombre, correo, contrasena)
+                VALUES (?, ?, ?)""", (usuario.nombre, usuario.correo, usuario.contrasena))
             conexion.commit()
 
-            cursor.close()
-            conexion.close()
-            print("Usuario guardado correctamente")
-
-        except Exception as ex:
-            print("Error al guardar usuario:", str(ex))
-
-    def actualizar(self, id_usuario, nombre, correo):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def actualizar(usuario: Usuarios):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = "UPDATE usuarios SET nombre = ?, correo = ? WHERE id_usuario = ?"
-            cursor.execute(consulta, (nombre, correo, id_usuario))
+            cursor.execute("""
+                UPDATE usuarios SET nombre=?, correo=?, contrasena=? WHERE id_usuario=?""",
+                (usuario.nombre, usuario.correo, usuario.contrasena, usuario.id_usuario))
             conexion.commit()
 
-            cursor.close()
-            conexion.close()
-            print("Usuario actualizado correctamente")
-
-        except Exception as ex:
-            print("Error al actualizar usuario:", str(ex))
-
-    def eliminar(self, id_usuario):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def eliminar(id_usuario):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = "DELETE FROM usuarios WHERE id_usuario = ?"
-            cursor.execute(consulta, (id_usuario,))
+            cursor.execute("DELETE FROM usuarios WHERE id_usuario=?", (id_usuario,))
             conexion.commit()
-
-            cursor.close()
-            conexion.close()
-            print("Usuario eliminado correctamente")
-
-        except Exception as ex:
-            print("Error al eliminar usuario:", str(ex))

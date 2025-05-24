@@ -29,3 +29,12 @@ class Notificaciones:
         return self.leido
     def SetLeido(self, value: bool) -> None:
         self.leido = value
+
+    def serialize(self):
+        return {
+            "id_notificacion": self.id_notificacion,
+            "id_usuario": self.id_usuario,
+            "mensaje": self.mensaje,
+            "fecha": self.fecha.isoformat() if isinstance(self.fecha, datetime) else str(self.fecha),
+            "leido": self.leido
+        }

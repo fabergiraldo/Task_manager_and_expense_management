@@ -1,95 +1,43 @@
 import pyodbc
+from Utilidades.Configuracion import strConnection
 from Entidades.Ingresos import Ingresos
-from Utilidades.Configuracion import Configuracion
 
 class IngresosRepositorio:
 
-    def listar(self):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = """
-                SELECT i.id_ingreso, i.id_usuario, i.monto, i.descripcion, 
-                       i.fecha, i.id_metodo_pago, i.estado
-                FROM ingresos i
-            """
+    @staticmethod
+    def listar():
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-            cursor.execute(consulta)
+            cursor.execute(
+                "SELECT id_ingreso, id_usuario, fecha, monto, descripcion, id_moneda, id_cuenta, id_metodo_pago FROM ingresos"
+            )
+            return [Ingresos(*fila) for fila in cursor.fetchall()]
 
-            lista = []
-            for elemento in cursor:
-                ingreso = Ingresos(
-                    id_ingreso=elemento[0],
-                    id_usuario=elemento[1],
-                    monto=elemento[2],
-                    descripcion=elemento[3],
-                    fecha=elemento[4],
-                    id_metodo_pago=elemento[5],
-                    estado=elemento[6]
-                )
-                lista.append(ingreso)
-
-            cursor.close()
-            conexion.close()
-
-            return lista
-
-        except Exception as ex:
-            print("Error al listar ingresos:", str(ex))
-            return []
-
-    def guardar(self, id_usuario, monto, descripcion, fecha, id_metodo_pago, estado):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def crear(ingreso: Ingresos):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = """
-                INSERT INTO ingresos (id_usuario, monto, descripcion, fecha, id_metodo_pago, estado)
-                VALUES (?, ?, ?, ?, ?, ?)
-            """
-            cursor.execute(consulta, (id_usuario, monto, descripcion, fecha, id_metodo_pago, estado))
+            cursor.execute(
+                "INSERT INTO ingresos (id_usuario, fecha, monto, descripcion, id_moneda, id_cuenta, id_metodo_pago) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (ingreso.id_usuario, ingreso.fecha, ingreso.monto, ingreso.descripcion,
+                 ingreso.id_moneda, ingreso.id_cuenta, ingreso.id_metodo_pago)
+            )
             conexion.commit()
 
-            cursor.close()
-            conexion.close()
-            print("Ingreso guardado correctamente")
-
-        except Exception as ex:
-            print("Error al guardar ingreso:", str(ex))
-
-    def actualizar(self, id_ingreso, id_usuario, monto, descripcion, fecha, id_metodo_pago, estado):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def actualizar(ingreso: Ingresos):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = """
-                UPDATE ingresos 
-                SET id_usuario = ?, monto = ?, descripcion = ?, fecha = ?, 
-                    id_metodo_pago = ?, estado = ?
-                WHERE id_ingreso = ?
-            """
-            cursor.execute(consulta, (id_usuario, monto, descripcion, fecha, 
-                                    id_metodo_pago, estado, id_ingreso))
+            cursor.execute(
+                "UPDATE ingresos SET id_usuario=?, fecha=?, monto=?, descripcion=?, id_moneda=?, id_cuenta=?, id_metodo_pago=? WHERE id_ingreso=?",
+                (ingreso.id_usuario, ingreso.fecha, ingreso.monto, ingreso.descripcion,
+                 ingreso.id_moneda, ingreso.id_cuenta, ingreso.id_metodo_pago, ingreso.id_ingreso)
+            )
             conexion.commit()
 
-            cursor.close()
-            conexion.close()
-            print("Ingreso actualizado correctamente")
-
-        except Exception as ex:
-            print("Error al actualizar ingreso:", str(ex))
-
-    def eliminar(self, id_ingreso):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def eliminar(id_ingreso):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = "DELETE FROM ingresos WHERE id_ingreso = ?"
-            cursor.execute(consulta, (id_ingreso,))
+            cursor.execute("DELETE FROM ingresos WHERE id_ingreso=?", (id_ingreso,))
             conexion.commit()
-
-            cursor.close()
-            conexion.close()
-            print("Ingreso eliminado correctamente")
-
-        except Exception as ex:
-            print("Error al eliminar ingreso:", str(ex)) 

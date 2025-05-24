@@ -1,75 +1,41 @@
 import pyodbc
+from Utilidades.Configuracion import strConnection
 from Entidades.Presupuestos import Presupuestos
-from Utilidades.Configuracion import Configuracion
 
 class PresupuestosRepositorio:
-    def listar(self):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = "SELECT id_presupuesto, id_usuario, id_categoria, mes, monto FROM presupuestos"
+
+    @staticmethod
+    def listar():
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-            cursor.execute(consulta)
+            cursor.execute(
+                "SELECT id_presupuesto, id_usuario, id_categoria, mes, monto FROM presupuestos"
+            )
+            return [Presupuestos(*fila) for fila in cursor.fetchall()]
 
-            lista = []
-            for e in cursor:
-                p = Presupuestos(
-                    id_presupuesto=e[0],
-                    id_usuario=e[1],
-                    id_categoria=e[2],
-                    mes=e[3],
-                    monto=e[4]
-                )
-                lista.append(p)
-
-            cursor.close()
-            conexion.close()
-            return lista
-        except Exception as ex:
-            print("Error al listar presupuestos:", str(ex))
-            return []
-
-    def guardar(self, id_usuario, id_categoria, mes, monto):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def crear(presupuesto: Presupuestos):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = "INSERT INTO presupuestos (id_usuario, id_categoria, mes, monto) VALUES (?, ?, ?, ?)"
-            cursor.execute(consulta, (id_usuario, id_categoria, mes, monto))
+            cursor.execute(
+                "INSERT INTO presupuestos (id_usuario, id_categoria, mes, monto) VALUES (?, ?, ?, ?)",
+                (presupuesto.id_usuario, presupuesto.id_categoria, presupuesto.mes, presupuesto.monto)
+            )
             conexion.commit()
 
-            cursor.close()
-            conexion.close()
-            print("Presupuesto guardado correctamente")
-        except Exception as ex:
-            print("Error al guardar presupuesto:", str(ex))
-
-    def actualizar(self, id_presupuesto, id_usuario, id_categoria, mes, monto):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def actualizar(presupuesto: Presupuestos):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = ("UPDATE presupuestos SET id_usuario = ?, id_categoria = ?, mes = ?, monto = ? "
-                        "WHERE id_presupuesto = ?")
-            cursor.execute(consulta, (id_usuario, id_categoria, mes, monto, id_presupuesto))
+            cursor.execute(
+                "UPDATE presupuestos SET id_usuario=?, id_categoria=?, mes=?, monto=? WHERE id_presupuesto=?",
+                (presupuesto.id_usuario, presupuesto.id_categoria, presupuesto.mes, presupuesto.monto, presupuesto.id_presupuesto)
+            )
             conexion.commit()
 
-            cursor.close()
-            conexion.close()
-            print("Presupuesto actualizado correctamente")
-        except Exception as ex:
-            print("Error al actualizar presupuesto:", str(ex))
-
-    def eliminar(self, id_presupuesto):
-        try:
-            conexion = pyodbc.connect(Configuracion.strConnection)
+    @staticmethod
+    def eliminar(id_presupuesto):
+        with pyodbc.connect(strConnection) as conexion:
             cursor = conexion.cursor()
-
-            consulta = "DELETE FROM presupuestos WHERE id_presupuesto = ?"
-            cursor.execute(consulta, (id_presupuesto,))
+            cursor.execute("DELETE FROM presupuestos WHERE id_presupuesto=?", (id_presupuesto,))
             conexion.commit()
-
-            cursor.close()
-            conexion.close()
-            print("Presupuesto eliminado correctamente")
-        except Exception as ex:
-            print("Error al eliminar presupuesto:", str(ex))

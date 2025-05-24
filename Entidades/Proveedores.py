@@ -29,3 +29,12 @@ class Proveedores:
         return self.correo
     def SetCorreo(self, value: str) -> None:
         self.correo = value
+
+    def serialize(self):
+        return {
+            "id_proveedor": self.id_proveedor,
+            "nombre": self.nombre,
+            "contacto": self.contacto,
+            "telefono": self.telefono,
+            "correo": self.correo
+        }

@@ -29,3 +29,15 @@ class Transacciones:
         return self.fecha
     def SetFecha(self, value: str) -> None:
         self.fecha = value
+
+    def serialize(self):
+        return {
+            "id_transaccion": self.id_transaccion,
+            "id_usuario": self.id_usuario,
+            "tipo": self.tipo,
+            "id_categoria": self.id_categoria,
+            "id_moneda": self.id_moneda,
+            "id_cuenta": self.id_cuenta,
+            "id_metodo_pago": self.id_metodo_pago,
+            "fecha": self.fecha.isoformat() if isinstance(self.fecha, datetime) else str(self.fecha)
+        }

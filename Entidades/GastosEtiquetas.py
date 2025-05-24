@@ -15,3 +15,9 @@ class GastosEtiquetas:
 
     def __str__(self):
         return f"id_gasto: {self.GetId_gasto()}, id_etiqueta: {self.GetId_etiqueta()}"
+    
+    def serialize(self):
+        return {
+            "id_gasto": self.id_gasto,
+            "id_etiqueta": self.id_etiqueta
+        }

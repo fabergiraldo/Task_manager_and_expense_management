@@ -1,14 +1,18 @@
 class Gastos:
-    def __init__(self, id_gasto: int = 0, id_usuario: int = 0, fecha: str = None, monto: float = 0.0, descripcion: str = None, id_categoria: int = 0, id_moneda: int = 0, id_cuenta: int = 0, id_tarjeta: int = 0):
+    def __init__(self, id_gasto=None, id_usuario=None, fecha=None, monto=None, descripcion=None,
+                 id_categoria=None, id_moneda=None, id_cuenta=None, id_tarjeta=None,
+                 id_proveedor=None, id_metodo_pago=None):
         self.id_gasto = id_gasto
         self.id_usuario = id_usuario
         self.fecha = fecha
         self.monto = monto
         self.descripcion = descripcion
         self.id_categoria = id_categoria
-        self.id_moneda = id.moneda
-        self.cuenta = id_cuenta
+        self.id_moneda = id_moneda
+        self.id_cuenta = id_cuenta
         self.id_tarjeta = id_tarjeta
+        self.id_proveedor = id_proveedor
+        self.id_metodo_pago = id_metodo_pago
     
     
     def GetId_gasto(self) -> int:
@@ -56,5 +60,30 @@ class Gastos:
     def SetId_tarjeta(self, value: int) -> None:
         self.id_tarjeta = value
 
+    def GetId_proveedor(self) -> int:
+        return self.id_proveedor
+    def SetId_proveedor(self, value: int) -> None:
+        self.id_proveedor = value
+
+    def GetId_metodo_pago(self) -> int:
+        return self.id_metodo_pago
+    def SetId_metodo_pago(self, value: int) -> None:
+        self.id_metodo_pago = value
+
     def __str__(self):
-		return f"id_gasto: {self.GetId_gasto()}, id_usuario: {self.GetId_usuario()}, fecha: {self.GetFecha()}, monto: {self.GetMonto()}, descripcion: {self.GetDescripcion()}, id_categoria: {self.GetId_categoria()}, id.moneda: {self.GetId_moneda()}, id_cuenta: {self.GetId_cuenta()}, id_tarjeta: {self.GetId_tarjeta()}"
+        return f"id_gasto: {self.GetId_gasto()}, id_usuario: {self.GetId_usuario()}, fecha: {self.GetFecha()}, monto: {self.GetMonto()}, descripcion: {self.GetDescripcion()}, id_categoria: {self.GetId_categoria()}, id.moneda: {self.GetId_moneda()}, id_cuenta: {self.GetId_cuenta()}, id_tarjeta: {self.GetId_tarjeta()}"
+    
+    def serialize(self):
+        return {
+            "id_gasto": self.id_gasto,
+            "id_usuario": self.id_usuario,
+            "fecha": self.fecha.isoformat() if isinstance(self.fecha, (date, datetime)) else str(self.fecha),
+            "monto": float(self.monto) if self.monto is not None else None,
+            "descripcion": self.descripcion,
+            "id_categoria": self.id_categoria,
+            "id_moneda": self.id_moneda,
+            "id_cuenta": self.id_cuenta,
+            "id_tarjeta": self.id_tarjeta,
+            "id_proveedor": self.id_proveedor,
+            "id_metodo_pago": self.id_metodo_pago
+        }

@@ -23,3 +23,9 @@ class Categorias:
 
 	def __str__(self):
 		return f"ID: {self.GetIdCategoria()}, nombre: {self.GetNombre()}, descripcion: {self.GetDescripcion()}"
+	
+	def serialize(self):
+		return {
+            "id_categoria": self.id_categoria,
+            "nombre": self.nombre,
+            "descripcion": self.descripcion}
