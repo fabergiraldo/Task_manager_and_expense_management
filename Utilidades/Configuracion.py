@@ -7,3 +7,6 @@ class Configuracion:
 		user=user_ptyhon;
 		password=Clas3s1Nt2024_!""";
 
+
+SECRET_KEY = "MiClaveSecretaJWT"
+
