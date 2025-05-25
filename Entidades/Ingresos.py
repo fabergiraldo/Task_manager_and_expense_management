@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 class Ingresos:
     def __init__(self, id_ingreso=None, id_usuario=None, fecha=None, monto=None, descripcion=None,
                  id_moneda=None, id_cuenta=None, id_metodo_pago=None):

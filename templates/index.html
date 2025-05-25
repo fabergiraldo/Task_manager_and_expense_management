@@ -180,66 +180,86 @@
 
 
 
- <!-- 4. Monedas -->
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingMonedas">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMonedas" aria-expanded="false" aria-controls="collapseMonedas">
-            4. Monedas
-          </button>
-        </h2>
-        <div id="collapseMonedas" class="accordion-collapse collapse" aria-labelledby="headingMonedas" data-bs-parent="#apiAccordion">
-          <div class="accordion-body">
-            <!-- Listar Monedas -->
-            <div class="mb-4">
-              <p><strong>Listar Monedas</strong></p>
-              <div class="endpoint-link">
-                <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
-                <div class="endpoint-url">/monedas/listar?token=&lt;TOKEN&gt;</div>
-              </div>
-              <button class="btn btn-outline-primary" id="btn-monedas-listar">Ejecutar</button>
-            </div>
-            <!-- Crear Moneda -->
-            <div class="mb-4">
-              <p><strong>Crear Moneda</strong></p>
-              <div class="endpoint-link">
-                <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
-                <div class="endpoint-url">/monedas/crear?token=&lt;TOKEN&gt;&nombre=&lt;nombre&gt;&codigo=&lt;codigo&gt;&simbolo=&lt;simbolo&gt;</div>
-              </div>
-              <div class="row g-2">
-                <div class="col-md-4"><input type="text" id="monedas-crear-nombre" class="form-control" placeholder="Nombre"></div>
-                <div class="col-md-4"><input type="text" id="monedas-crear-codigo" class="form-control" placeholder="Código"></div>
-                <div class="col-md-4"><input type="text" id="monedas-crear-simbolo" class="form-control" placeholder="Símbolo"></div>
-              </div>
-              <button class="btn btn-outline-success mt-2" id="btn-monedas-crear">Ejecutar</button>
-            </div>
-            <!-- Actualizar Moneda -->
-            <div class="mb-4">
-              <p><strong>Actualizar Moneda</strong></p>
-              <div class="endpoint-link">
-                <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
-                <div class="endpoint-url">/monedas/actualizar?token=&lt;TOKEN&gt;&id_moneda=&lt;id&gt;&nombre=&lt;nombre&gt;&codigo=&lt;codigo&gt;&simbolo=&lt;simbolo&gt;</div>
-              </div>
-              <div class="row g-2">
-                <div class="col-md-2"><input type="number" id="monedas-actualizar-id_moneda" class="form-control" placeholder="ID"></div>
-                <div class="col-md-3"><input type="text" id="monedas-actualizar-nombre" class="form-control" placeholder="Nombre"></div>
-                <div class="col-md-3"><input type="text" id="monedas-actualizar-codigo" class="form-control" placeholder="Código"></div>
-                <div class="col-md-3"><input type="text" id="monedas-actualizar-simbolo" class="form-control" placeholder="Símbolo"></div>
-              </div>
-              <button class="btn btn-outline-warning mt-2" id="btn-monedas-actualizar">Ejecutar</button>
-            </div>
-            <!-- Eliminar Moneda -->
-            <div class="mb-4">
-              <p><strong>Eliminar Moneda</strong></p>
-              <div class="endpoint-link">
-                <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
-                <div class="endpoint-url">/monedas/eliminar?token=&lt;TOKEN&gt;&id_moneda=&lt;id&gt;</div>
-              </div>
-              <div class="col-md-2"><input type="number" id="monedas-eliminar-id_moneda" class="form-control" placeholder="ID"></div>
-              <button class="btn btn-outline-danger mt-2" id="btn-monedas-eliminar">Ejecutar</button>
-            </div>
+ <!-- Monedas -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingMonedas">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseMonedas"
+            aria-expanded="false" aria-controls="collapseMonedas">
+      4. Monedas
+    </button>
+  </h2>
+  <div id="collapseMonedas" class="accordion-collapse collapse"
+       aria-labelledby="headingMonedas" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Monedas -->
+      <div class="mb-4">
+        <p><strong>Listar Monedas</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/monedas/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-monedas-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Moneda -->
+      <div class="mb-4">
+        <p><strong>Crear Moneda</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /monedas/crear?token=&lt;TOKEN&gt;
+            &nombre=&lt;texto&gt;
+            &codigo=&lt;texto&gt;
+            &simbolo=&lt;texto&gt;
           </div>
         </div>
+        <div class="row g-2">
+          <div class="col-md-4"><input type="text" id="monedas-crear-nombre" class="form-control" placeholder="Nombre"></div>
+          <div class="col-md-4"><input type="text" id="monedas-crear-codigo" class="form-control" placeholder="Código"></div>
+          <div class="col-md-4"><input type="text" id="monedas-crear-simbolo" class="form-control" placeholder="Símbolo"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-monedas-crear">Ejecutar</button>
       </div>
+
+      <!-- Actualizar Moneda -->
+      <div class="mb-4">
+        <p><strong>Actualizar Moneda</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /monedas/actualizar?token=&lt;TOKEN&gt;
+            &id_moneda=&lt;id&gt;
+            &nombre=&lt;texto&gt;
+            &codigo=&lt;texto&gt;
+            &simbolo=&lt;texto&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="monedas-actualizar-id_moneda" class="form-control" placeholder="ID"></div>
+          <div class="col-md-3"><input type="text" id="monedas-actualizar-nombre" class="form-control" placeholder="Nombre"></div>
+          <div class="col-md-3"><input type="text" id="monedas-actualizar-codigo" class="form-control" placeholder="Código"></div>
+          <div class="col-md-3"><input type="text" id="monedas-actualizar-simbolo" class="form-control" placeholder="Símbolo"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-monedas-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Moneda -->
+      <div class="mb-4">
+        <p><strong>Eliminar Moneda</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/monedas/eliminar?token=&lt;TOKEN&gt;&id_moneda=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="monedas-eliminar-id_moneda" class="form-control" placeholder="ID"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-monedas-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
       <!-- Cuentas Bancarias -->
 <div class="accordion-item">
@@ -452,10 +472,10 @@
           </div>
         </div>
         <div class="row g-2">
-          <div class="col-md-2"><input type="number" id="gastos-crear-id_usuario"    class="form-control" placeholder="ID Usuario"></div>
-          <div class="col-md-2"><input type="date"   id="gastos-crear-fecha"         class="form-control" placeholder="Fecha"></div>
-          <div class="col-md-2"><input type="number" step="0.01" id="gastos-crear-monto"      class="form-control" placeholder="Monto"></div>
-          <div class="col-md-4"><input type="text"   id="gastos-crear-descripcion"  class="form-control" placeholder="Descripción"></div>
+          <div class="col-md-2"><input type="number" id="gastos-crear-id_usuario" class="form-control" placeholder="ID Usuario"></div>
+          <div class="col-md-2"><input type="date"   id="gastos-crear-fecha"      class="form-control" placeholder="Fecha"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="gastos-crear-monto" class="form-control" placeholder="Monto"></div>
+          <div class="col-md-4"><input type="text"   id="gastos-crear-descripcion" class="form-control" placeholder="Descripción"></div>
           <div class="col-md-2"><input type="number" id="gastos-crear-id_categoria" class="form-control" placeholder="ID Categoría"></div>
           <div class="col-md-2"><input type="number" id="gastos-crear-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
           <div class="col-md-2"><input type="number" id="gastos-crear-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
@@ -490,13 +510,13 @@
           <div class="col-md-2"><input type="number" id="gastos-actualizar-id_gasto"    class="form-control" placeholder="ID Gasto"></div>
           <div class="col-md-2"><input type="number" id="gastos-actualizar-id_usuario"  class="form-control" placeholder="ID Usuario"></div>
           <div class="col-md-2"><input type="date"   id="gastos-actualizar-fecha"       class="form-control" placeholder="Fecha"></div>
-          <div class="col-md-2"><input type="number" step="0.01" id="gastos-actualizar-monto"    class="form-control" placeholder="Monto"></div>
-          <div class="col-md-4"><input type="text"   id="gastos-actualizar-descripcion"class="form-control" placeholder="Descripción"></div>
-          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_categoria"class="form-control" placeholder="ID Categoría"></div>
-          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_moneda" class="form-control" placeholder="ID Moneda"></div>
-          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_cuenta" class="form-control" placeholder="ID Cuenta"></div>
-          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_tarjeta"class="form-control" placeholder="ID Tarjeta"></div>
-          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_proveedor"class="form-control" placeholder="ID Proveedor"></div>
+          <div class="col-md-2"><input type="number" step="0.01" id="gastos-actualizar-monto" class="form-control" placeholder="Monto"></div>
+          <div class="col-md-4"><input type="text"   id="gastos-actualizar-descripcion" class="form-control" placeholder="Descripción"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_categoria" class="form-control" placeholder="ID Categoría"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_moneda"    class="form-control" placeholder="ID Moneda"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_cuenta"    class="form-control" placeholder="ID Cuenta"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_tarjeta"   class="form-control" placeholder="ID Tarjeta"></div>
+          <div class="col-md-2"><input type="number" id="gastos-actualizar-id_proveedor" class="form-control" placeholder="ID Proveedor"></div>
           <div class="col-md-2"><input type="number" id="gastos-actualizar-id_metodo_pago" class="form-control" placeholder="ID Método Pago"></div>
         </div>
         <button class="btn btn-outline-warning mt-2" id="btn-gastos-actualizar">Ejecutar</button>
@@ -516,6 +536,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Ingresos -->
 <div class="accordion-item">
@@ -861,13 +882,100 @@
   </div>
 </div>
 
+<!-- Proveedores -->
+<div class="accordion-item">
+  <h2 class="accordion-header" id="headingProveedores">
+    <button class="accordion-button collapsed" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapseProveedores"
+            aria-expanded="false" aria-controls="collapseProveedores">
+      12. Proveedores
+    </button>
+  </h2>
+  <div id="collapseProveedores" class="accordion-collapse collapse"
+       aria-labelledby="headingProveedores" data-bs-parent="#apiAccordion">
+    <div class="accordion-body">
+
+      <!-- Listar Proveedores -->
+      <div class="mb-4">
+        <p><strong>Listar Proveedores</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-primary">GET</span></div>
+          <div class="endpoint-url">/proveedores/listar?token=&lt;TOKEN&gt;</div>
+        </div>
+        <button class="btn btn-outline-primary" id="btn-proveedores-listar">Ejecutar</button>
+      </div>
+
+      <!-- Crear Proveedor -->
+      <div class="mb-4">
+        <p><strong>Crear Proveedor</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-success">GET</span></div>
+          <div class="endpoint-url">
+            /proveedores/crear?token=&lt;TOKEN&gt;
+            &nombre=&lt;texto&gt;
+            &contacto=&lt;texto&gt;
+            &telefono=&lt;texto&gt;
+            &correo=&lt;email&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-3"><input type="text"   id="proveedores-crear-nombre"    class="form-control" placeholder="Nombre"></div>
+          <div class="col-md-3"><input type="text"   id="proveedores-crear-contacto"  class="form-control" placeholder="Contacto"></div>
+          <div class="col-md-3"><input type="text"   id="proveedores-crear-telefono" class="form-control" placeholder="Teléfono"></div>
+          <div class="col-md-3"><input type="email"  id="proveedores-crear-correo"   class="form-control" placeholder="Correo"></div>
+        </div>
+        <button class="btn btn-outline-success mt-2" id="btn-proveedores-crear">Ejecutar</button>
+      </div>
+
+      <!-- Actualizar Proveedor -->
+      <div class="mb-4">
+        <p><strong>Actualizar Proveedor</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-warning text-dark">GET</span></div>
+          <div class="endpoint-url">
+            /proveedores/actualizar?token=&lt;TOKEN&gt;
+            &id_proveedor=&lt;id&gt;
+            &nombre=&lt;texto&gt;
+            &contacto=&lt;texto&gt;
+            &telefono=&lt;texto&gt;
+            &correo=&lt;email&gt;
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md-2"><input type="number" id="proveedores-actualizar-id_proveedor" class="form-control" placeholder="ID Proveedor"></div>
+          <div class="col-md-3"><input type="text"   id="proveedores-actualizar-nombre"       class="form-control" placeholder="Nombre"></div>
+          <div class="col-md-3"><input type="text"   id="proveedores-actualizar-contacto"     class="form-control" placeholder="Contacto"></div>
+          <div class="col-md-2"><input type="text"   id="proveedores-actualizar-telefono"    class="form-control" placeholder="Teléfono"></div>
+          <div class="col-md-2"><input type="email"  id="proveedores-actualizar-correo"      class="form-control" placeholder="Correo"></div>
+        </div>
+        <button class="btn btn-outline-warning mt-2" id="btn-proveedores-actualizar">Ejecutar</button>
+      </div>
+
+      <!-- Eliminar Proveedor -->
+      <div class="mb-4">
+        <p><strong>Eliminar Proveedor</strong></p>
+        <div class="endpoint-link">
+          <div class="endpoint-method"><span class="badge bg-danger">GET</span></div>
+          <div class="endpoint-url">/proveedores/eliminar?token=&lt;TOKEN&gt;&id_proveedor=&lt;id&gt;</div>
+        </div>
+        <div class="col-md-2"><input type="number" id="proveedores-eliminar-id_proveedor" class="form-control" placeholder="ID Proveedor"></div>
+        <button class="btn btn-outline-danger mt-2" id="btn-proveedores-eliminar">Ejecutar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
 <!-- Métodos de Pago -->
 <div class="accordion-item">
   <h2 class="accordion-header" id="headingMetodosPago">
     <button class="accordion-button collapsed" type="button"
             data-bs-toggle="collapse" data-bs-target="#collapseMetodosPago"
             aria-expanded="false" aria-controls="collapseMetodosPago">
-      12. Métodos de Pago
+      13. Métodos de Pago
     </button>
   </h2>
   <div id="collapseMetodosPago" class="accordion-collapse collapse"
@@ -932,7 +1040,7 @@
     <button class="accordion-button collapsed" type="button"
             data-bs-toggle="collapse" data-bs-target="#collapseTransacciones"
             aria-expanded="false" aria-controls="collapseTransacciones">
-      13. Transacciones
+      14. Transacciones
     </button>
   </h2>
   <div id="collapseTransacciones" class="accordion-collapse collapse"
@@ -1028,7 +1136,7 @@
     <button class="accordion-button collapsed" type="button"
             data-bs-toggle="collapse" data-bs-target="#collapseEtiquetas"
             aria-expanded="false" aria-controls="collapseEtiquetas">
-      14. Etiquetas
+      15. Etiquetas
     </button>
   </h2>
   <div id="collapseEtiquetas" class="accordion-collapse collapse"
@@ -1104,7 +1212,7 @@
     <button class="accordion-button collapsed" type="button"
             data-bs-toggle="collapse" data-bs-target="#collapseGastosEtiquetas"
             aria-expanded="false" aria-controls="collapseGastosEtiquetas">
-      15. Gastos_Etiquetas
+      16. Gastos_Etiquetas
     </button>
   </h2>
   <div id="collapseGastosEtiquetas" class="accordion-collapse collapse"
@@ -1165,7 +1273,7 @@
     <button class="accordion-button collapsed" type="button"
             data-bs-toggle="collapse" data-bs-target="#collapseIngresosEtiquetas"
             aria-expanded="false" aria-controls="collapseIngresosEtiquetas">
-      16. Ingresos_Etiquetas
+      17. Ingresos_Etiquetas
     </button>
   </h2>
   <div id="collapseIngresosEtiquetas" class="accordion-collapse collapse"
@@ -1270,10 +1378,10 @@
       'btn-categorias-crear': ['categorias', 'crear', ['categorias-crear-nombre', 'categorias-crear-descripcion']],
       'btn-categorias-actualizar': ['categorias', 'actualizar', ['categorias-actualizar-id_categoria','categorias-actualizar-nombre','categorias-actualizar-descripcion']],
       'btn-categorias-eliminar': ['categorias', 'eliminar', ['categorias-eliminar-id_categoria']],
-      'btn-monedas-listar': ['monedas','listar'],
-      'btn-monedas-crear': ['monedas','crear',['monedas-crear-nombre','monedas-crear-codigo','monedas-crear-simbolo']],
+      'btn-monedas-listar':     ['monedas','listar'],
+      'btn-monedas-crear':      ['monedas','crear',    ['monedas-crear-nombre','monedas-crear-codigo','monedas-crear-simbolo']],
       'btn-monedas-actualizar': ['monedas','actualizar',['monedas-actualizar-id_moneda','monedas-actualizar-nombre','monedas-actualizar-codigo','monedas-actualizar-simbolo']],
-      'btn-monedas-eliminar': ['monedas','eliminar',['monedas-eliminar-id_moneda']],
+      'btn-monedas-eliminar':   ['monedas','eliminar', ['monedas-eliminar-id_moneda']],
       'btn-cuentas-listar':     ['cuentas_bancarias','listar'],
       'btn-cuentas-crear':      ['cuentas_bancarias','crear',   ['cuentas-crear-id_usuario','cuentas-crear-nombre_banco','cuentas-crear-numero_cuenta','cuentas-crear-saldo','cuentas-crear-id_moneda']],
       'btn-cuentas-actualizar': ['cuentas_bancarias','actualizar',['cuentas-actualizar-id_cuenta','cuentas-actualizar-id_usuario','cuentas-actualizar-nombre_banco','cuentas-actualizar-numero_cuenta','cuentas-actualizar-saldo','cuentas-actualizar-id_moneda']],
@@ -1319,7 +1427,12 @@
       'btn-gastos_etiquetas-eliminar':   ['gastos_etiquetas','eliminar', ['gastos_etiquetas-eliminar-id_gasto','gastos_etiquetas-eliminar-id_etiqueta']],
       'btn-ingresos_etiquetas-listar':   ['ingresos_etiquetas','listar'],
       'btn-ingresos_etiquetas-crear':    ['ingresos_etiquetas','crear',    ['ingresos_etiquetas-crear-id_ingreso','ingresos_etiquetas-crear-id_etiqueta']],
-      'btn-ingresos_etiquetas-eliminar': ['ingresos_etiquetas','eliminar', ['ingresos_etiquetas-eliminar-id_ingreso','ingresos_etiquetas-eliminar-id_etiqueta']]
+      'btn-ingresos_etiquetas-eliminar': ['ingresos_etiquetas','eliminar', ['ingresos_etiquetas-eliminar-id_ingreso','ingresos_etiquetas-eliminar-id_etiqueta']],
+      'btn-proveedores-listar':     ['proveedores','listar'],
+      'btn-proveedores-crear':      ['proveedores','crear',    ['proveedores-crear-nombre','proveedores-crear-contacto','proveedores-crear-telefono','proveedores-crear-correo']],
+      'btn-proveedores-actualizar': ['proveedores','actualizar',['proveedores-actualizar-id_proveedor','proveedores-actualizar-nombre','proveedores-actualizar-contacto','proveedores-actualizar-telefono','proveedores-actualizar-correo']],
+      'btn-proveedores-eliminar':   ['proveedores','eliminar', ['proveedores-eliminar-id_proveedor']]
+
 };
 
     Object.entries(actions).forEach(([btnId, [ent, act, params]]) => {
