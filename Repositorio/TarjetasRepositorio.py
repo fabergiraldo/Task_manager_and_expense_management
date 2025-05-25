@@ -1,43 +1,49 @@
 import pyodbc
 from Entidades.Tarjetas import Tarjetas
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES
 
 class TarjetasRepositorio:
+    def __init__(self):
+        self.encriptarAES = EncriptarAES()
     def listar(self):
+        respuesta: dict = {};    
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = ("SELECT id_tarjeta, id_usuario, nombre_tarjeta, tipo, numero_tarjeta, "
-                        "vencimiento FROM tarjetas")
+            consulta = "SELECT id_tarjeta, id_usuario, nombre_tarjeta, tipo, numero_tarjeta, vencimiento FROM tarjetas"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
-            for e in cursor:
-                tarjeta = Tarjetas(
-                    id_tarjeta=e[0],
-                    id_usuario=e[1],
-                    nombre_tarjeta=e[2],
-                    tipo=e[3],
-                    numero_tarjeta=e[4],
-                    vencimiento=e[5]
-                )
-                lista.append(tarjeta)
+            contador = 0;
+            for elemento in cursor:
+                lista: dict = {};                
+                lista["id_tarjeta"]=elemento[0];
+                lista["id_usuario"]=elemento[1];
+                lista["nombre_tarjeta"]=elemento[2];
+                lista["tipo"]=elemento[3];
+                lista["numero_tarjeta"]=self.encriptarAES.decifrar(elemento[5]);
+                lista["vencimiento"]=elemento[5];
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;  
+
 
             cursor.close()
             conexion.close()
-            return lista
+            return respuesta;
         except Exception as ex:
             print("Error al listar tarjetas:", str(ex))
-            return []
+            return respuesta;
 
     def guardar(self, id_usuario, nombre_tarjeta, tipo, numero_tarjeta, vencimiento):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
 
-            consulta = ("INSERT INTO tarjetas (id_usuario, nombre_tarjeta, tipo, numero_tarjeta, vencimiento) "
-                        "VALUES (?, ?, ?, ?, ?)")
-            cursor.execute(consulta, (id_usuario, nombre_tarjeta, tipo, numero_tarjeta, vencimiento))
+            encriptador = EncriptarAES()
+            cifrado = encriptador.cifrar(numero_tarjeta)
+
+            consulta = "INSERT INTO tarjetas (id_usuario, nombre_tarjeta, tipo, numero_tarjeta, vencimiento) VALUES (?, ?, ?, ?, ?)"
+            cursor.execute(consulta, (id_usuario, nombre_tarjeta, tipo, cifrado, vencimiento))
             conexion.commit()
 
             cursor.close()

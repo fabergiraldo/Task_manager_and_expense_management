@@ -1,41 +1,47 @@
 import pyodbc
 from Entidades.Categorias import Categorias
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES 
 
 class CategoriasRepositorio:
-
+    def __init__(self):
+        self.encriptarAES = EncriptarAES() 
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             consulta = "SELECT id_categoria, nombre, descripcion FROM categorias"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
+            contador = 0;
             for elemento in cursor:
-                categoria = Categorias(
-                    id_categoria=elemento[0],
-                    nombre=elemento[1],
-                    descripcion=elemento[2]
-                )
-                lista.append(categoria)
+                lista: dict = {};                
+                lista["id_categoria"]=elemento[0];
+                lista["nombre"]=elemento[1];
+                lista["descripcion"]=self.encriptarAES.decifrar(elemento[2]);
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;  
 
             cursor.close()
             conexion.close()
 
-            return lista
+            return respuesta;
 
         except Exception as ex:
             print("Error al listar categorías:", str(ex))
-            return []
+            return respuesta;
 
     def guardar(self, nombre, descripcion):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
 
+            encriptador = EncriptarAES()
+            cifrado = encriptador.cifrar(descripcion)
+
             consulta = "INSERT INTO categorias (nombre, descripcion) VALUES (?, ?)"
-            cursor.execute(consulta, (nombre, descripcion))
+            cursor.execute(consulta, (nombre, cifrado))
             conexion.commit()
 
             cursor.close()

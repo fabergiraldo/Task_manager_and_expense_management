@@ -1,32 +1,34 @@
 import pyodbc
 from Entidades.Etiquetas import Etiquetas
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES
 
 class EtiquetasRepositorio:
-
+    def __init__(self):
+        self.encriptarAES = EncriptarAES() 
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             consulta = "SELECT id_etiqueta, nombre FROM etiquetas"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
+            contador = 0;
             for elemento in cursor:
-                etiqueta = Etiquetas(
-                    id_etiqueta=elemento[0],
-                    nombre=elemento[1]
-                )
-                lista.append(etiqueta)
+                lista: dict = {};                
+                lista["id_etiqueta"]=elemento[0];
+                lista["nombre"]=elemento[1];
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;
 
             cursor.close()
             conexion.close()
-
-            return lista
+            return respuesta;
 
         except Exception as ex:
             print("Error al listar etiquetas:", str(ex))
-            return []
+            return respuesta;
 
     def guardar(self, nombre):
         try:

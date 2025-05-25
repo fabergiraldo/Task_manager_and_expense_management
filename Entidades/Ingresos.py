@@ -1,3 +1,4 @@
+from Utilidades.Encriptar import EncriptarAES
 class Ingresos:
     def __init__(self, id_ingreso: int = 0, id_usuario: int = 0, fecha: str = None, monto: float = 0.0, descripcion: str = None, id_moneda: int = 0, id_cuenta: int = 0):
         self.id_ingreso = id_ingreso
@@ -30,9 +31,9 @@ class Ingresos:
         self.monto = value
 
     def GetDescripcion(self) -> str:
-        return self.descripcion
+        return EncriptarAES.decifrar(self.descripcion) if self.descripcion else None
     def SetDescripcion(self, value: str) -> None:
-        self.descripcion = value
+        self.descripcion = EncriptarAES.cifrar(value) if value else None
 
     def GetId_moneda(self) -> int:
         return self.id_moneda
@@ -44,5 +45,5 @@ class Ingresos:
     def SetId_cuenta(self, value: int) -> None:
         self.id_cuenta = value
 
-	def __str__(self):
-		return f"id_ingreso: {self.GetId_ingreso()}, id_usuario: {self.GetId_usuario()}, fecha: {self.GetRuta_archivo()}, monto: {self.GetMonto()}, descripcion: {self.GetDescripcion()}, id_moneda: {self.GetId_moneda()}, id_cuenta:{self.GetId_cuenta()}"
+    def __str__(self):
+        return f"id_ingreso: {self.GetId_ingreso()}, id_usuario: {self.GetId_usuario()}, fecha: {self.GetRuta_archivo()}, monto: {self.GetMonto()}, descripcion: {self.GetDescripcion()}, id_moneda: {self.GetId_moneda()}, id_cuenta:{self.GetId_cuenta()}"

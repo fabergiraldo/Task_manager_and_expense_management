@@ -1,3 +1,4 @@
+# IngresosEtiquetas: Solo contiene IDs de relación
 class IngresosEtiquetas:
     def __init__(self, id_ingreso: int = 0, id_etiqueta: int = 0):
         self.id_ingreso = id_ingreso
@@ -13,5 +14,5 @@ class IngresosEtiquetas:
     def SetId_etiqueta(self, value: int) -> None:
         self.id_etiqueta = value
 
-	def __str__(self):
-		return f"id_ingreso: {self.GetId_ingreso()}, id_etiqueta: {self.GetId_etiqueta()}"
+    def __str__(self):
+        return f"id_ingreso: {self.GetId_ingreso()}, id_etiqueta: {self.GetId_etiqueta()}"

@@ -1,3 +1,4 @@
+from Utilidades.Encriptar import EncriptarAES
 class Facturas:
     def __init__(self, id_factura: int = 0, id_gasto: int = 0, ruta_archivo: str = None):
         self.id_factura = id_factura
@@ -15,9 +16,9 @@ class Facturas:
         self.id_gasto = value
 
     def GetRuta_archivo(self) -> str:
-        return self.ruta_archivo
+        return EncriptarAES.decifrar(self.ruta_archivo) if self.ruta_archivo else None
     def SetRuta_archivo(self, value: str) -> None:
-        self.ruta_archivo = value
+        self.ruta_archivo = EncriptarAES.cifrar(value) if value else None
 
-	def __str__(self):
-		return f"ID: {self.GetId_factura()}, nombre: {self.GetId_gasto()}, descripcion: {self.GetRuta_archivo()}"
+    def __str__(self):
+        return f"ID: {self.GetId_factura()}, nombre: {self.GetId_gasto()}, descripcion: {self.GetRuta_archivo()}"

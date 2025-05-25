@@ -1,3 +1,4 @@
+from Utilidades.Encriptar import EncriptarAES
 class CuentasBancarias:
 	def __init__(self, id_cuenta: int = 0, id_usuario: int = 0, nombre_banco: str = None, numero_cuenta: str = None, saldo: float = 0.0, id_moneda: int = 0):
 		self.id_cuenta = id_cuenta
@@ -26,9 +27,9 @@ class CuentasBancarias:
  
 	
 	def GetNumeroCuenta(self) -> str:
-		return self.numero_cuenta
+		return EncriptarAES.decifrar(self.numero_cuenta) if self.numero_cuenta else None
 	def SetNumeroCuenta(self, value: str) -> None:
-		self.numero_cuenta = value
+		self.numero_cuenta = EncriptarAES.cifrar(value) if value else None
  
 	
 	def GetSaldo(self) -> float:

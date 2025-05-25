@@ -1,31 +1,41 @@
+from Utilidades.Encriptar import EncriptarAES
 class Presupuestos:
-    id_presupuesto: int = 0
-    id_usuario: int = 0
-    id_categoria: int = 0
-    mes: str = None
-    monto: float = 0.0
+    def __init__(self, id_presupuesto: int = 0, id_usuario: int = 0, id_categoria: int = 0, mes: str = None, monto: float = 0.0):
+        self.id_presupuesto = id_presupuesto
+        self.id_usuario = id_usuario
+        self.id_categoria = id_categoria
+        self.mes = mes
+        self.monto = monto
 
-    def GetId_presupuesto(self) -> int:
+    id_presupuesto: int = 0
+    def GetIdPresupuesto(self) -> int:
         return self.id_presupuesto
-    def SetId_presupuesto(self, value: int) -> None:
+    def SetIdPresupuesto(self, value: int) -> None:
         self.id_presupuesto = value
 
-    def GetId_usuario(self) -> int:
+    id_usuario: int = 0
+    def GetIdUsuario(self) -> int:
         return self.id_usuario
-    def SetId_usuario(self, value: int) -> None:
+    def SetIdUsuario(self, value: int) -> None:
         self.id_usuario = value
 
-    def GetId_categoria(self) -> int:
+    id_categoria: int = 0
+    def GetIdCategoria(self) -> int:
         return self.id_categoria
-    def SetId_categoria(self, value: int) -> None:
+    def SetIdCategoria(self, value: int) -> None:
         self.id_categoria = value
 
+    mes: str = None
     def GetMes(self) -> str:
-        return self.mes
+        return EncriptarAES.decifrar(self.mes) if self.mes else None
     def SetMes(self, value: str) -> None:
-        self.mes = value
+        self.mes = EncriptarAES.cifrar(value) if value else None
 
+    monto: float = 0.0
     def GetMonto(self) -> float:
         return self.monto
     def SetMonto(self, value: float) -> None:
         self.monto = value
+
+    def __str__(self):
+        return f"ID: {self.GetIdPresupuesto()}, usuario: {self.GetIdUsuario()}, categoría: {self.GetIdCategoria()}, mes: {self.GetMes()}, monto: {self.GetMonto()}"

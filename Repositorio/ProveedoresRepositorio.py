@@ -1,38 +1,51 @@
 import pyodbc
 from Entidades.Proveedores import Proveedores
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES 
 
 class ProveedoresRepositorio:
+    def __init__(self):
+        self.encriptarAES = EncriptarAES()
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
-            cursor.execute("SELECT id_proveedor, nombre, contacto, telefono, correo FROM proveedores")
-            lista = [
-                Proveedores(
-                    id_proveedor=row[0],
-                    nombre=row[1],
-                    contacto=row[2],
-                    telefono=row[3],
-                    correo=row[4]
-                ) for row in cursor
-            ]
+            consulta = "SELECT id_proveedor, nombre, contacto, telefono, correo FROM proveedores"
+            cursor = conexion.cursor()
+            cursor.execute(consulta)
+
+            contador = 0;
+            for elemento in cursor:
+                lista: dict = {};                
+                lista["id_proveedor"]=elemento[0];
+                lista["nombre"]=elemento[1];
+                lista["contacto"]=self.encriptarAES.decifrar(elemento[2]);
+                lista["telefono"]=self.encriptarAES.decifrar(elemento[3]);
+                lista["correo"]=self.encriptarAES.decifrar(elemento[4]);
+                respuesta[str(contador)] = lista;
+                contador = contador + 1; 
+            
             cursor.close()
             conexion.close()
-            return lista
+            return respuesta;
         except Exception as ex:
             print("Error al listar proveedores:", ex)
-            return []
+            return respuesta;
 
     def guardar(self, nombre, contacto, telefono, correo):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
-            cursor.execute(
-                "INSERT INTO proveedores (nombre, contacto, telefono, correo) VALUES (?, ?, ?, ?)",
-                (nombre, contacto, telefono, correo)
-            )
+
+            encriptador = EncriptarAES()
+            cifradoC = encriptador.cifrar(contacto)
+            cifradoT = encriptador.cifrar(telefono)  
+            cifradoE = encriptador.cifrar(correo)      
+            consulta = "INSERT INTO proveedores (nombre, contacto, telefono, correo) VALUES (?, ?, ?, ?)"
+            cursor.execute(consulta, (nombre, cifradoC, cifradoT, cifradoE))
             conexion.commit()
+                      
             cursor.close()
             conexion.close()
             print("Proveedor guardado correctamente")

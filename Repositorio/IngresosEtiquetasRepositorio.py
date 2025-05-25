@@ -1,36 +1,37 @@
 import pyodbc
 from Entidades.IngresosEtiquetas import IngresosEtiquetas
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES 
 
 class IngresosEtiquetasRepositorio:
+    def __init__(self):
+        self.encriptarAES = EncriptarAES()
 
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = """
-                SELECT id_ingreso_etiqueta, id_ingreso, id_etiqueta
-                FROM ingresos_etiquetas
-            """
+            consulta = "SELECT id_ingreso, id_etiqueta FROM ingresos_etiquetas"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
+            contador = 0;
             for elemento in cursor:
-                ingreso_etiqueta = IngresosEtiquetas(
-                    id_ingreso_etiqueta=elemento[0],
-                    id_ingreso=elemento[1],
-                    id_etiqueta=elemento[2]
-                )
-                lista.append(ingreso_etiqueta)
+                lista: dict = {};                
+                lista["id_ingreso"]=elemento[0];
+                lista["id_etiqueta"]=elemento[1];
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;  
+
 
             cursor.close()
             conexion.close()
 
-            return lista
+            return respuesta;
 
         except Exception as ex:
             print("Error al listar ingresos_etiquetas:", str(ex))
-            return []
+            return respuesta;
 
     def guardar(self, id_ingreso, id_etiqueta):
         try:

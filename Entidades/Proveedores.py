@@ -1,9 +1,11 @@
+from Utilidades.Encriptar import EncriptarAES
 class Proveedores:
-    id_proveedor: int = 0
-    nombre: str = None
-    contacto: str = None
-    telefono: str = None
-    correo: str = None
+    def __init__(self, id_proveedor: int = 0, nombre: str = None, contacto: str = None, telefono: str = None, correo: str = None):
+        self.id_proveedor = id_proveedor
+        self.nombre = nombre
+        self.contacto = contacto
+        self.telefono = telefono
+        self.correo = correo
 
     def GetId_proveedor(self) -> int:
         return self.id_proveedor
@@ -16,16 +18,19 @@ class Proveedores:
         self.nombre = value
 
     def GetContacto(self) -> str:
-        return self.contacto
+        return EncriptarAES.decifrar(self.contacto) if self.contacto else None
     def SetContacto(self, value: str) -> None:
-        self.contacto = value
+        self.contacto = EncriptarAES.cifrar(value) if value else None
 
     def GetTelefono(self) -> str:
-        return self.telefono
+        return EncriptarAES.decifrar(self.telefono) if self.telefono else None
     def SetTelefono(self, value: str) -> None:
-        self.telefono = value
+        self.telefono = EncriptarAES.cifrar(value) if value else None
 
     def GetCorreo(self) -> str:
-        return self.correo
+        return EncriptarAES.decifrar(self.correo) if self.correo else None
     def SetCorreo(self, value: str) -> None:
-        self.correo = value
+        self.correo = EncriptarAES.cifrar(value) if value else None
+
+    def __str__(self):
+        return f"id_proveedor: {self.GetId_proveedor()}, nombre: {self.GetNombre()}, contacto: {self.GetContacto()}, telefono: {self.GetTelefono()}, correo: {self.GetCorreo()}"

@@ -1,31 +1,35 @@
 import pyodbc
 from Entidades.Monedas import Monedas
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES
 
 class MonedasRepositorio:
+    def __init__(self):
+        self.encriptarAES = EncriptarAES() 
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             consulta = "SELECT id_moneda, nombre, codigo, simbolo FROM monedas"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
+            contador = 0;
             for elemento in cursor:
-                moneda = Monedas(
-                    id_moneda=elemento[0],
-                    nombre=elemento[1],
-                    codigo=elemento[2],
-                    simbolo=elemento[3]
-                )
-                lista.append(moneda)
+                lista: dict = {};                
+                lista["id_moneda"]=elemento[0];
+                lista["nombre"]=elemento[1];
+                lista["codigo"]=elemento[2];
+                lista["simbolo"]=elemento[3];
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;
 
             cursor.close()
             conexion.close()
-            return lista
+            return respuesta;
         except Exception as ex:
             print("Error al listar monedas:", str(ex))
-            return []
+            return respuesta;
 
     def guardar(self, nombre, codigo, simbolo):
         try:

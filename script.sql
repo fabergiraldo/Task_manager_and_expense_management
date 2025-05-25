@@ -15,6 +15,15 @@ CREATE TABLE usuarios (
     fecha_registro DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabla Usuarios
+ALTER TABLE usuarios 
+ADD COLUMN nonce VARBINARY(16), 
+ADD COLUMN auth_tag VARBINARY(16);
+
+ALTER TABLE usuarios 
+MODIFY contrasena VARBINARY(255);
+
+
 -- Tabla Categorías
 CREATE TABLE categorias (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,9 +67,11 @@ CREATE TABLE proveedores (
     id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
     contacto VARCHAR(100),
-    telefono VARCHAR(20),
+    telefono VARCHAR(100),
     correo VARCHAR(100)
 );
+-- telefono esta como varchar(20) y esto afecta la encriptacion
+ALTER TABLE proveedores MODIFY COLUMN telefono VARCHAR(100);
 
 -- Tabla Métodos de Pago
 CREATE TABLE metodos_pago (
@@ -116,6 +127,7 @@ CREATE TABLE presupuestos (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
 );
+ALTER TABLE presupuestos MODIFY COLUMN mes VARCHAR(255);
 
 -- Tabla Facturas
 CREATE TABLE facturas (
@@ -153,6 +165,7 @@ CREATE TABLE transacciones (
     FOREIGN KEY (id_cuenta) REFERENCES cuentas_bancarias(id_cuenta),
     FOREIGN KEY (id_metodo_pago) REFERENCES metodos_pago(id_metodo_pago)
 );
+ALTER TABLE transacciones MODIFY COLUMN tipo VARCHAR(50);
 
 -- Tabla Etiquetas
 CREATE TABLE etiquetas (

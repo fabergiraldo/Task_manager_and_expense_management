@@ -1,4 +1,11 @@
+# Solo contiene información pública sobre monedas no aplica para encriptacion
 class Monedas:
+	def __init__(self, id_moneda: int = 0, nombre: str = None, codigo: str = None, simbolo: str = None):
+		self.id_moneda = id_moneda
+		self.nombre = nombre
+		self.codigo = codigo
+		self.simbolo = simbolo
+
 	id_moneda: int = 0
 	def GetIdMoneda(self) -> int:
 		return self.id_moneda
@@ -22,3 +29,6 @@ class Monedas:
 		return self.simbolo
 	def SetSimbolo(self, value: str) -> None:
 		self.simbolo = value
+
+	def __str__(self):
+		return f"id_moneda: {self.GetIdMoneda()}, nombre: {self.GetNombre()}, codigo: {self.GetCodigo()}, simbolo: {self.GetSimbolo()}"

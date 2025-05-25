@@ -1,56 +1,59 @@
 import pyodbc
 from Entidades.Gastos import Gastos
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES
 
 class GastosRepositorio:
+    def __init__(self):
+        self.encriptarAES = EncriptarAES() 
 
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = """
-                SELECT g.id_gasto, g.id_usuario, g.id_categoria, g.monto, g.descripcion, 
-                       g.fecha, g.id_metodo_pago, g.id_proveedor, g.estado
-                FROM gastos g
-            """
+            consulta = "SELECT g.id_gasto, g.id_usuario, g.fecha, g.monto, g.descripcion, g.id_categoria, g.id_moneda, g.id_cuenta, g.id_tarjeta, g.id_proveedor, g.id_metodo_pago FROM gastos g"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
+            contador = 0;
             for elemento in cursor:
-                gasto = Gastos(
-                    id_gasto=elemento[0],
-                    id_usuario=elemento[1],
-                    id_categoria=elemento[2],
-                    monto=elemento[3],
-                    descripcion=elemento[4],
-                    fecha=elemento[5],
-                    id_metodo_pago=elemento[6],
-                    id_proveedor=elemento[7],
-                    estado=elemento[8]
-                )
-                lista.append(gasto)
+                lista: dict = {};                
+                lista["id_gasto"]=elemento[0];
+                lista["id_usuario"]=elemento[1];
+                lista["fecha"]=elemento[2];
+                lista["monto"]=elemento[3];
+                lista["descripcion"]=self.encriptarAES.decifrar(elemento[4]);
+                lista["id_categoria"]=elemento[5];
+                lista["id_moneda"]=elemento[6];
+                lista["id_cuenta"]=elemento[7];
+                lista["id_tarjeta"]=elemento[8];
+                lista["id_proveedor"]=elemento[9];
+                lista["id_metodo_pago"]=elemento[10];
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;
 
             cursor.close()
             conexion.close()
 
-            return lista
+            return respuesta;
 
         except Exception as ex:
             print("Error al listar gastos:", str(ex))
-            return []
+            return respuesta;
 
-    def guardar(self, id_usuario, id_categoria, monto, descripcion, fecha, id_metodo_pago, id_proveedor, estado):
+    def guardar(self, id_usuario, fecha, monto, descripcion, id_categoria, id_moneda, id_cuenta, id_tarjeta, id_proveedor, id_metodo_pago):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
 
+            encriptador = EncriptarAES()
+            cifrado = encriptador.cifrar(descripcion)
+
             consulta = """
-                INSERT INTO gastos (id_usuario, id_categoria, monto, descripcion, 
-                                  fecha, id_metodo_pago, id_proveedor, estado)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO gastos (id_usuario, fecha, monto, descripcion, id_categoria, id_moneda, id_cuenta, id_tarjeta, id_proveedor, id_metodo_pago)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
-            cursor.execute(consulta, (id_usuario, id_categoria, monto, descripcion, 
-                                    fecha, id_metodo_pago, id_proveedor, estado))
+            cursor.execute(consulta, (id_usuario, fecha, monto, cifrado, id_categoria, id_moneda, id_cuenta, id_tarjeta, id_proveedor, id_metodo_pago))
             conexion.commit()
 
             cursor.close()
@@ -60,20 +63,13 @@ class GastosRepositorio:
         except Exception as ex:
             print("Error al guardar gasto:", str(ex))
 
-    def actualizar(self, id_gasto, id_usuario, id_categoria, monto, descripcion, 
-                  fecha, id_metodo_pago, id_proveedor, estado):
+    def actualizar(self, id_usuario, fecha, monto, descripcion, id_categoria, id_moneda, id_cuenta, id_tarjeta, id_proveedor, id_metodo_pago):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
 
-            consulta = """
-                UPDATE gastos 
-                SET id_usuario = ?, id_categoria = ?, monto = ?, descripcion = ?,
-                    fecha = ?, id_metodo_pago = ?, id_proveedor = ?, estado = ?
-                WHERE id_gasto = ?
-            """
-            cursor.execute(consulta, (id_usuario, id_categoria, monto, descripcion,
-                                    fecha, id_metodo_pago, id_proveedor, estado, id_gasto))
+            consulta = "UPDATE gastos SET id_usuario = ?, fecha = ?, monto = ?, descripcion = ?, id_categoria = ?, id_moneda = ?, id_cuenta = ?, id_tarjeta = ?, id_proveedor = ?, id_metodo_pago = ? WHERE id_gasto = ?"
+            cursor.execute(consulta, (id_usuario, fecha, monto, descripcion, id_categoria, id_moneda, id_cuenta, id_tarjeta, id_proveedor, id_metodo_pago))
             conexion.commit()
 
             cursor.close()

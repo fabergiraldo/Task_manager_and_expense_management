@@ -1,31 +1,66 @@
-class Transacciones:
-    id_transaccion: int = 0
-    tipo: str = None
-    id_gasto: int = 0
-    id_ingreso: int = 0
-    fecha: str = None
+from Utilidades.Encriptar import EncriptarAES
 
-    def GetId_transaccion(self) -> int:
+class Transacciones:
+    def __init__(self, id_transaccion: int = 0, id_usuario: int = 0, tipo: str = None, id_categoria: int = 0, 
+                 id_moneda: int = 0, id_cuenta: int = 0, id_metodo_pago: int = 0, fecha: str = None):
+        self.id_transaccion = id_transaccion
+        self.id_usuario = id_usuario
+        self.tipo = tipo
+        self.id_categoria = id_categoria
+        self.id_moneda = id_moneda
+        self.id_cuenta = id_cuenta
+        self.id_metodo_pago = id_metodo_pago
+        self.fecha = fecha
+
+    id_transaccion: int = 0
+    def GetIdTransaccion(self) -> int:
         return self.id_transaccion
-    def SetId_transaccion(self, value: int) -> None:
+    def SetIdTransaccion(self, value: int) -> None:
         self.id_transaccion = value
 
+    id_usuario: int = 0
+    def GetIdUsuario(self) -> int:
+        return self.id_usuario
+    def SetIdUsuario(self, value: int) -> None:
+        self.id_usuario = value
+
+    tipo: str = None
     def GetTipo(self) -> str:
-        return self.tipo
+        return EncriptarAES.decifrar(self.tipo) if self.tipo else None
     def SetTipo(self, value: str) -> None:
-        self.tipo = value
+        self.tipo = EncriptarAES.cifrar(value) if value else None
 
-    def GetId_gasto(self) -> int:
-        return self.id_gasto
-    def SetId_gasto(self, value: int) -> None:
-        self.id_gasto = value
+    id_categoria: int = 0
+    def GetIdCategoria(self) -> int:
+        return self.id_categoria
+    def SetIdCategoria(self, value: int) -> None:
+        self.id_categoria = value
 
-    def GetId_ingreso(self) -> int:
-        return self.id_ingreso
-    def SetId_ingreso(self, value: int) -> None:
-        self.id_ingreso = value
+    id_moneda: int = 0
+    def GetIdMoneda(self) -> int:
+        return self.id_moneda
+    def SetIdMoneda(self, value: int) -> None:
+        self.id_moneda = value
 
+    id_cuenta: int = 0
+    def GetIdCuenta(self) -> int:
+        return self.id_cuenta
+    def SetIdCuenta(self, value: int) -> None:
+        self.id_cuenta = value
+
+    id_metodo_pago: int = 0
+    def GetIdMetodoPago(self) -> int:
+        return self.id_metodo_pago
+    def SetIdMetodoPago(self, value: int) -> None:
+        self.id_metodo_pago = value
+
+    fecha: str = None
     def GetFecha(self) -> str:
         return self.fecha
     def SetFecha(self, value: str) -> None:
         self.fecha = value
+
+    def __str__(self):
+        return (f"ID: {self.GetIdTransaccion()}, usuario: {self.GetIdUsuario()}, tipo: {self.GetTipo()}, "
+                f"categoría: {self.GetIdCategoria()}, moneda: {self.GetIdMoneda()}, cuenta: {self.GetIdCuenta()}, "
+                f"método pago: {self.GetIdMetodoPago()}, fecha: {self.GetFecha()}")

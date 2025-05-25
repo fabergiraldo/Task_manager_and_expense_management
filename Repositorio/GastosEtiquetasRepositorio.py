@@ -1,46 +1,42 @@
 import pyodbc
 from Entidades.GastosEtiquetas import GastosEtiquetas
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptar import EncriptarAES
 
 class GastosEtiquetasRepositorio:
-
+    def __init__(self):
+        self.encriptarAES = EncriptarAES() 
     def listar(self):
+        respuesta: dict = {};
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
-            consulta = """
-                SELECT id_gasto_etiqueta, id_gasto, id_etiqueta
-                FROM gastos_etiquetas
-            """
+            consulta = "SELECT id_gasto, id_etiqueta FROM gastos_etiquetas"
             cursor = conexion.cursor()
             cursor.execute(consulta)
 
-            lista = []
+            contador = 0;
             for elemento in cursor:
-                gasto_etiqueta = GastosEtiquetas(
-                    id_gasto_etiqueta=elemento[0],
-                    id_gasto=elemento[1],
-                    id_etiqueta=elemento[2]
-                )
-                lista.append(gasto_etiqueta)
+                lista: dict = {};                
+                lista["id_gasto"]=elemento[0];
+                lista["id_etiqueta"]=elemento[1];
+                respuesta[str(contador)] = lista;
+                contador = contador + 1;
 
             cursor.close()
             conexion.close()
 
-            return lista
+            return respuesta;
 
         except Exception as ex:
             print("Error al listar gastos_etiquetas:", str(ex))
-            return []
+            return respuesta;
 
     def guardar(self, id_gasto, id_etiqueta):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
 
-            consulta = """
-                INSERT INTO gastos_etiquetas (id_gasto, id_etiqueta)
-                VALUES (?, ?)
-            """
+            consulta = "INSERT INTO gastos_etiquetas (id_gasto, id_etiqueta) VALUES (?, ?)"
             cursor.execute(consulta, (id_gasto, id_etiqueta))
             conexion.commit()
 

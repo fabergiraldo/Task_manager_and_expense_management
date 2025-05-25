@@ -4,50 +4,73 @@ from Utilidades.Configuracion import Configuracion
 
 class MetodosPagoRepositorio:
     def listar(self):
+        respuesta: dict = {}
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
+            consulta = "SELECT id_metodo_pago, metodo FROM metodos_pago"
             cursor = conexion.cursor()
-            cursor.execute("SELECT id_metodo_pago, metodo FROM metodos_pago")
-            lista = [MetodosPago(id_metodo_pago=row[0], metodo=row[1]) for row in cursor]
+            cursor.execute(consulta)
+
+            contador = 0
+            for elemento in cursor:
+                lista: dict = {}                
+                lista["id_metodo_pago"] = elemento[0]
+                lista["metodo"] = elemento[1]
+                respuesta[str(contador)] = lista
+                contador += 1
+
             cursor.close()
             conexion.close()
-            return lista
+            return respuesta
+
         except Exception as ex:
-            print("Error al listar métodos de pago:", ex)
-            return []
+            print("Error al listar métodos de pago:", str(ex))
+            return respuesta
 
     def guardar(self, metodo):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
-            cursor.execute("INSERT INTO metodos_pago (metodo) VALUES (?)", (metodo,))
+
+            consulta = "INSERT INTO metodos_pago (metodo) VALUES (?)"
+            cursor.execute(consulta, (metodo,))
             conexion.commit()
+
             cursor.close()
             conexion.close()
             print("Método de pago guardado correctamente")
+
         except Exception as ex:
-            print("Error al guardar método de pago:", ex)
+            print("Error al guardar método de pago:", str(ex))
 
     def actualizar(self, id_metodo_pago, metodo):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
-            cursor.execute("UPDATE metodos_pago SET metodo = ? WHERE id_metodo_pago = ?", (metodo, id_metodo_pago))
+
+            consulta = "UPDATE metodos_pago SET metodo = ? WHERE id_metodo_pago = ?"
+            cursor.execute(consulta, (metodo, id_metodo_pago))
             conexion.commit()
+
             cursor.close()
             conexion.close()
             print("Método de pago actualizado correctamente")
+
         except Exception as ex:
-            print("Error al actualizar método de pago:", ex)
+            print("Error al actualizar método de pago:", str(ex))
 
     def eliminar(self, id_metodo_pago):
         try:
             conexion = pyodbc.connect(Configuracion.strConnection)
             cursor = conexion.cursor()
-            cursor.execute("DELETE FROM metodos_pago WHERE id_metodo_pago = ?", (id_metodo_pago,))
+
+            consulta = "DELETE FROM metodos_pago WHERE id_metodo_pago = ?"
+            cursor.execute(consulta, (id_metodo_pago,))
             conexion.commit()
+
             cursor.close()
             conexion.close()
             print("Método de pago eliminado correctamente")
+
         except Exception as ex:
-            print("Error al eliminar método de pago:", ex)
+            print("Error al eliminar método de pago:", str(ex))

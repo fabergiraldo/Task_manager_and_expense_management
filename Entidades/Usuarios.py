@@ -1,3 +1,5 @@
+from Utilidades.Encriptar import EncriptarAES
+
 class Usuarios:
     def __init__(self, id_usuario: int = 0, nombre: str = None, correo: str = None, contrasena: str = None, fecha_registro: str = None):
         self.id_usuario = id_usuario
@@ -19,16 +21,16 @@ class Usuarios:
         self.nombre = value
 
     def GetCorreo(self) -> str:
-        return self.correo
+        return EncriptarAES.decifrar(self.correo) if self.correo else None
 
     def SetCorreo(self, value: str) -> None:
-        self.correo = value
+        self.correo = EncriptarAES.cifrar(value) if value else None
 
     def GetContrasena(self) -> str:
-        return self.contrasena
+        return EncriptarAES.decifrar(self.contrasena) if self.contrasena else None
 
     def SetContrasena(self, value: str) -> None:
-        self.contrasena = value
+        self.contrasena = EncriptarAES.cifrar(value) if value else None
 
     def GetFechaRegistro(self) -> str:
         return self.fecha_registro
