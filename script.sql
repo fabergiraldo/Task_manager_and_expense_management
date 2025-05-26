@@ -52,6 +52,8 @@ CREATE TABLE tarjetas (
     vencimiento DATE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
+ALTER TABLE tarjetas MODIFY COLUMN numero_tarjeta VARCHAR(255);
+
 
 -- Tabla Proveedores
 CREATE TABLE proveedores (

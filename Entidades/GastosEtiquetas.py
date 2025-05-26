@@ -1,3 +1,4 @@
+# No aplica encriptacion, Solo contiene IDs de relación
 class GastosEtiquetas:
     def __init__(self, id_gasto: int = 0, id_etiqueta: int = 0):
         self.id_gasto = id_gasto

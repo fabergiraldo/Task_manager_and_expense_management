@@ -1,3 +1,4 @@
+# No aplica Encriptacion, solo contiene nombres de métodos de pago
 class MetodosPago:
     def __init__(self, id_metodo_pago=None, metodo=None):
         self.id_metodo_pago = id_metodo_pago

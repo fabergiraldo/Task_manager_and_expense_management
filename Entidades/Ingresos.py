@@ -1,5 +1,5 @@
 from datetime import date, datetime
-
+from Utilidades.Encriptar import EncriptarAES
 class Ingresos:
     def __init__(self, id_ingreso=None, id_usuario=None, fecha=None, monto=None, descripcion=None,
                  id_moneda=None, id_cuenta=None, id_metodo_pago=None):
@@ -34,9 +34,10 @@ class Ingresos:
         self.monto = value
 
     def GetDescripcion(self) -> str:
-        return self.descripcion
+        return EncriptarAES.decifrar(self.descripcion) if self.descripcion else None
     def SetDescripcion(self, value: str) -> None:
-        self.descripcion = value
+        self.descripcion = EncriptarAES.cifrar(value) if value else None
+
 
     def GetId_moneda(self) -> int:
         return self.id_moneda

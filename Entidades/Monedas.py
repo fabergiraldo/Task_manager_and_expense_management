@@ -1,4 +1,5 @@
 # entidades/moneda.py
+# Solo contiene información pública sobre monedas no aplica para encriptacion
 class Monedas:
     def __init__(self, id_moneda=None, nombre=None, codigo=None, simbolo=None):
         self.id_moneda = id_moneda

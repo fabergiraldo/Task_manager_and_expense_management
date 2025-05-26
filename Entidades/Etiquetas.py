@@ -1,3 +1,4 @@
+# No aplica encriptacion Solo contiene nombres de etiquetas
 class Etiquetas:
     def __init__(self, id_etiqueta: int = 0, nombre: str = None):
         self.id_etiqueta = id_etiqueta

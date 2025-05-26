@@ -1,3 +1,4 @@
+from Utilidades.Encriptar import EncriptarAES
 class Categorias:
 	def __init__(self, id_categoria: int = 0, nombre: str = None, descripcion: str = None):
 		self.id_categoria = id_categoria
